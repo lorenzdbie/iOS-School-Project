@@ -21,7 +21,7 @@ struct ContentView: View {
             
             Text("Hello, World")
             
-            Text("Let's test our first commit")
+            Text("this is the second commit")
                 .font(.system(size: 50))
                 .multilineTextAlignment(.center)
         }

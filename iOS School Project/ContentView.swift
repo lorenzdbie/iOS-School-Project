@@ -10,10 +10,20 @@ import SwiftUI
 struct ContentView: View {
     var body: some View {
         VStack {
+            Image("GitHub-Logo")
+                .resizable()
+                .scaledToFit()
+                .padding()
+            
             Image(systemName: "globe")
                 .imageScale(.large)
                 .foregroundStyle(.tint)
-            Text("Hello, world!")
+            
+            Text("Hello, World")
+            
+            Text("Let's test our first commit")
+                .font(.system(size: 50))
+                .multilineTextAlignment(.center)
         }
         .padding()
     }

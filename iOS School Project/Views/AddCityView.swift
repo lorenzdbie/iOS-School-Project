@@ -7,59 +7,143 @@
 
 import SwiftUI
 
+
 struct AddCityView: View {
-    
     var model: WeatherViewModel
     
-    @State var countySelected: Bool = true
-    @State var stateSelected: Bool = true
-    @State var citySelected: Bool = true
-    @State var selectedCountry:Int = 0
+    @State private var selectedCountry: String = ""
+    @State private var selectedState: String = ""
+    @State private var selectedCity: String = ""
     
     var body: some View {
         title
+        Selector(title: "Country", items: model.locationProvider.getCountries(), selectedItem: $selectedCountry)
+        if !selectedCountry.isEmpty {
+            Selector(title: "State", items: model.locationProvider.getStates(country: selectedCountry) ?? [], selectedItem: $selectedState)
+        }
+        if !selectedState.isEmpty {
+            Selector(title: "City", items: model.locationProvider.getCities(country: selectedCountry, state: selectedState) ?? [], selectedItem: $selectedCity)
+        }
         Spacer()
-        selector
-        Spacer()
+        addButton
+        Spacer().frame(height: 30)
     }
     
-    private var title: some View{
-        Text("Add a new city").font(.system(size: 50)).padding(.bottom, 15)
+    private var title: some View {
+        Text("Add a new city").font(.system(size: 50)).padding(.bottom, 50)
     }
     
-    private var selector: some View{
-        VStack(alignment:.leading){
-            HStack{
-                Text("select Country: ")
-                Spacer()
-                Picker("Country", selection: $selectedCountry){
-                    ForEach(model.locationProvider.countries){ country in
-                        Text(country.name)
-                    }
-                    
-                }
-            }
-            if (countySelected){
-                HStack{
-                    Text("select state: ")
-                }
-            }
-            if (countySelected && stateSelected){
-                HStack{
-                    Text("select city: ")
-                }
-            }
-            Spacer().frame(height: 30)
-            HStack{
-                Spacer()
-                Button(action: /*@START_MENU_TOKEN@*/{}/*@END_MENU_TOKEN@*/, label: {
-                    Text("Add city")
-                }).disabled(!(citySelected && stateSelected && citySelected))
-                Spacer()
-            }
-        }.padding(.leading, 30)
+    private var addButton: some View{
+        HStack{
+            Spacer()
+            Button(action: {
+                // Handle add city action
+            }, label: {
+                Text("Add city")
+            }).disabled(selectedCountry.isEmpty || selectedState.isEmpty || selectedCity.isEmpty)
+            Spacer()
+        }
     }
 }
+
+
+struct Selector<T: Hashable>: View {
+    var title: String
+    var items: [String]
+    @Binding var selectedItem: T
+    
+    var body: some View {
+        HStack{
+            Text("\(title): ")
+               Spacer()
+            Picker(title, selection: $selectedItem) {
+                Text("Select ... ").tag("")
+                ForEach(items, id: \.self) { item in
+                    Text("\(item)")
+                }
+            }
+        }
+        .padding(.horizontal, 20)
+    }
+}
+
+
+//struct AddCityView: View {
+//    
+//    var model: WeatherViewModel
+//    
+//    @State var selectedCountry: String = ""
+//    @State var selectedState: String = ""
+//    @State var selectedCity: String = ""
+//    
+//    var body: some View {
+//        title
+//        selector
+//        Spacer()
+//    }
+//    
+//    private var title: some View {
+//        Text("Add a new city").font(.system(size: 50)).padding(.bottom, 50)
+//    }
+//    
+//    private var selector: some View {
+//        VStack(alignment:.leading) {
+//            HStack {
+//                Text("Country: ")
+//                Spacer()
+//                Picker("Country", selection: $selectedCountry) {
+//                    if selectedCountry.isEmpty{
+//                        Text("Select ... ").tag("")
+//                    }
+//                    ForEach(model.locationProvider.getCountries(), id: \.self) { country in
+//                        Text(country)
+//                    }
+//                }
+//            }
+//            if !selectedCountry.isEmpty {
+//                HStack {
+//                    Text("State: ")
+//                    Spacer()
+//                    Picker("State", selection: $selectedState) {
+//                        if selectedState.isEmpty{
+//                            Text("Select ... ").tag("")
+//                        }
+//                        ForEach(model.locationProvider.getStates(country: selectedCountry) ?? [], id: \.self) { state in
+//                            Text(state)
+//                        }
+//                    }
+//                }
+//            }
+//            if !selectedState.isEmpty {
+//                HStack {
+//                    Text("City: ")
+//                    Spacer()
+//                    Picker("City", selection: $selectedCity) {
+//                        if selectedCity.isEmpty{
+//                            Text("Select ... ").tag("")
+//                        }
+//                        ForEach(model.locationProvider.getCities(country: selectedCountry, state: selectedState) ?? [], id: \.self) { city in
+//                            Text(city)
+//                        }
+//                    }
+//                }
+//            }
+//            Spacer()
+//            HStack {
+//                Spacer()
+//                Button(action: {
+//                    // Handle add city action
+//                }, label: {
+//                    Text("Add city")
+//                }).disabled(selectedCountry.isEmpty || selectedState.isEmpty || selectedCity.isEmpty)
+//                Spacer()
+//            }
+//            Spacer().frame(height: 30)
+//        }.padding(.horizontal, 30)
+//    }
+//}
+
+
 
 #Preview {
     AddCityView(model: WeatherViewModel())

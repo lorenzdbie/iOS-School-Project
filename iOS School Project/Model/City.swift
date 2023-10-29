@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Country: Identifiable{
+struct Country: Identifiable, Equatable{
 let name:String
     let id =  UUID()
     
@@ -16,9 +16,10 @@ let name:String
     }
 }
 
-struct CityState{
+struct CityState: Identifiable, Equatable{
     let name: String
     let country: Country
+    let id =  UUID()
     
     init(_ name: String, country: Country) {
         self.name = name
@@ -26,9 +27,10 @@ struct CityState{
     }
 }
 
-struct City{
+struct City: Identifiable, Equatable{
     let name: String
     let state: CityState
+    let id =  UUID()
     
     init(_ name: String, state: CityState) {
         self.name = name

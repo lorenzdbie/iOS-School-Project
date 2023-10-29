@@ -44,7 +44,7 @@ struct cityCard: View{
         
         ZStack{
             HStack{
-                Text(city.city)
+                Text(city.city.name)
                     .font(.title)
                     .padding(.leading, 10)
                 Spacer()

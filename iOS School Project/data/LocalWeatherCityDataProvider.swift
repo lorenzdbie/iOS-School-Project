@@ -15,9 +15,14 @@ struct LocalWeatherCityDataProvider{
     init(){
         weatherCityList = [
             WeatherCity(
-                city: "Gent",
-                state: "Flanders",
-                country: "Belgium",
+                city: City(
+                     "Gent",
+                    state: CityState(
+                         "Flanders",
+                        country: Country(
+                             "Belgium")
+                    )
+                ),
                 location: Location(
                     longitude: 3.80873543079248,
                     latitude: 51.1501360922306),
@@ -37,9 +42,14 @@ struct LocalWeatherCityDataProvider{
                     mainChina: "o3")
                 ),
             WeatherCity(
-                city: "New York City",
-                state: "New York",
-                country: "USA",
+                city: City(
+                     "New York City",
+                    state: CityState(
+                         "New York",
+                        country: Country(
+                             "USA")
+                    )
+                ),
                 location: Location(
                     longitude: -73.928596,
                     latitude: 40.694401),

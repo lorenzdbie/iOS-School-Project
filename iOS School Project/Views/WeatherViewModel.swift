@@ -10,9 +10,11 @@ import SwiftUI
 class WeatherViewModel: ObservableObject{
     
     private let cityProvider = LocalWeatherCityDataProvider()
+   let locationProvider = LocationDataProvider()
     
     @Published var cityList: [WeatherCity]
     @Published var currentCity: WeatherCity
+    
     
     init() {
         cityList = cityProvider.getWeatherCityData()

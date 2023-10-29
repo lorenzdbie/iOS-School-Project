@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct DeatailWeatherView: View {
+struct DetailsWeatherView: View {
     
     let city: WeatherCity
     
@@ -29,11 +29,11 @@ struct DeatailWeatherView: View {
 
     private var detailHeader: some View{
         HStack(alignment: .firstTextBaseline){
-            Text("Country: " + city.country)
+            Text("Country: " + city.city.state.country.name)
             Spacer()
-            Text("State: " + city.state)
+            Text("State: " + city.city.state.name)
             Spacer()
-            Text("City: " + city.city)
+            Text("City: " + city.city.name)
         }.padding(.bottom, 10)
     }
 }
@@ -41,5 +41,5 @@ struct DeatailWeatherView: View {
 
 
 #Preview {
-    DeatailWeatherView(city: WeatherViewModel().cityList[1])
+    DetailsWeatherView(city: WeatherViewModel().cityList[1])
 }

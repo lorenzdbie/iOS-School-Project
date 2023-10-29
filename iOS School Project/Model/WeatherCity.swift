@@ -8,9 +8,7 @@
 import Foundation
 struct WeatherCity: Identifiable{
     let id = UUID()
-    let city: String
-    let state: String
-    let country: String
+    let city: City
     let location: Location
     let weather: Weather
     let pollution: Pollution

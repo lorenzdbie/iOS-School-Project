@@ -14,6 +14,7 @@ struct AddCityView: View {
     @State var countySelected: Bool = true
     @State var stateSelected: Bool = true
     @State var citySelected: Bool = true
+    @State var selectedCountry:Int = 0
     
     var body: some View {
         title
@@ -31,6 +32,12 @@ struct AddCityView: View {
             HStack{
                 Text("select Country: ")
                 Spacer()
+                Picker("Country", selection: $selectedCountry){
+                    ForEach(model.locationProvider.countries){ country in
+                        Text(country.name)
+                    }
+                    
+                }
             }
             if (countySelected){
                 HStack{

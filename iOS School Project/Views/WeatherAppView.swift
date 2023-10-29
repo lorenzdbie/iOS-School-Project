@@ -10,46 +10,68 @@ import SwiftUI
 struct WeatherAppView: View {
     
     @ObservedObject var model: WeatherViewModel
+    @State var active: Bool = false
     @Environment(\.colorScheme) var colorScheme
-    private var modeColor: Color { colorScheme == .dark ? .black : .white}
+    var modeColor: Color { colorScheme == .dark ? .gray : .gray}
     
     var body: some View {
-        VStack {
-            title
-            ForEach(model.cityList){ city in
-                cityCard(city)
-            }
-        }.padding(5)
-        Spacer()
-    }
+            VStack {
+                title
+                ForEach(model.cityList){ city in
+                    cityCard(city: city, modeColor: modeColor)
+                }
+            }.padding(5)
+            Spacer()
+        }
     
     var title: some View{
         HStack{
             Image("01n").resizable().scaledToFit()
-            Text("Weather").font(.largeTitle)
-        }.frame(height: 50)
+            Text("Weather").font(.system(size: 50))
+        }.frame(height: 50).padding(.bottom, 15)
     }
+}
+
+
+struct cityCard: View{
+    let city: WeatherCity
+    let modeColor: Color
     
-    @ViewBuilder
-    func cityCard(_ city: WeatherCity) -> some View{
-        let background = RoundedRectangle(cornerRadius: 20).foregroundColor(.accentColor).opacity(0.3)
+    var body: some View{
+        let background = RoundedRectangle(cornerRadius: 15)
+            .foregroundColor(.accentColor)
+            .opacity(0.3)
+        
         ZStack{
             HStack{
-                Text(city.city).font(.title).padding(.leading, 10)
+                Text(city.city)
+                    .font(.title)
+                    .padding(.leading, 10)
                 Spacer()
-                tempCard(city.weather.temperature)
-                Image(city.weather.weatherIcon).resizable().scaledToFit().padding(5)
-            }.background(RoundedRectangle(cornerRadius: 20.0).foregroundColor(modeColor)).padding(1)
-        }.background(background).frame(height: 70)
+                tempCard(city.weather)
+                weatherIcon(city.weather.weatherIcon)
+            }.background(RoundedRectangle(cornerRadius: 15.0)
+                .foregroundColor(modeColor))
+            .padding(1)
+        }.background(background)
+            .frame(height: 70)
     }
     
-    func tempCard(_ temp: Float)-> some View{
+    private func tempCard(_ weather: Weather)-> some View{
         VStack{
-            Text("\(temp, specifier: "%.1f")°C").fontWeight(.light).font(.caption)
-            Spacer()
+            Text("\(weather.temperature, specifier: "%.1f")°C").fontWeight(.light).font(.caption)
+         Spacer()
+            windDirection(weather.windDirection, size: "small").padding(.bottom, 10)
         }.padding(.top, 15)
     }
-    }
+}
+
+
+
+func weatherIcon(_ icon: String)-> some View{
+    Image(icon).resizable().scaledToFit().padding(5)
+}
+
 
 
 

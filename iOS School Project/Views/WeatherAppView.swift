@@ -59,18 +59,16 @@ struct cityCard: View{
     
     private func tempCard(_ weather: Weather)-> some View{
         VStack{
-            Text("\(weather.temperature, specifier: "%.1f")°C").fontWeight(.light).font(.caption)
+            temperture(weather.temperature, size: ViewSize.small).fontWeight(.light).font(.caption)
          Spacer()
-            windDirection(weather.windDirection, size: "small").padding(.bottom, 10)
+            windDirection(weather.windDirection, size: ViewSize.small).padding(.bottom, 10)
         }.padding(.top, 15)
     }
 }
 
 
 
-func weatherIcon(_ icon: String)-> some View{
-    Image(icon).resizable().scaledToFit().padding(5)
-}
+
 
 
 

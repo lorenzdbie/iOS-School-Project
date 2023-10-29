@@ -19,6 +19,8 @@
 		6E42BBA72AED73EB00F70D73 /* WeatherViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E42BBA62AED73EB00F70D73 /* WeatherViewModel.swift */; };
 		6E68C8A12AEE4D24008EF6FD /* AddCityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E68C8A02AEE4D24008EF6FD /* AddCityView.swift */; };
 		6E68C8A32AEE5860008EF6FD /* DeatailWeatherView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E68C8A22AEE5860008EF6FD /* DeatailWeatherView.swift */; };
+		6E68C8A52AEE79CB008EF6FD /* WeatherViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E68C8A42AEE79CB008EF6FD /* WeatherViews.swift */; };
+		6E68C8A82AEE88F6008EF6FD /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E68C8A72AEE88F6008EF6FD /* Utilities.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -35,6 +37,8 @@
 		6E42BBA62AED73EB00F70D73 /* WeatherViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherViewModel.swift; sourceTree = "<group>"; };
 		6E68C8A02AEE4D24008EF6FD /* AddCityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCityView.swift; sourceTree = "<group>"; };
 		6E68C8A22AEE5860008EF6FD /* DeatailWeatherView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeatailWeatherView.swift; sourceTree = "<group>"; };
+		6E68C8A42AEE79CB008EF6FD /* WeatherViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherViews.swift; sourceTree = "<group>"; };
+		6E68C8A72AEE88F6008EF6FD /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,6 +71,7 @@
 		6E42BB8A2AEBB07D00F70D73 /* iOS School Project */ = {
 			isa = PBXGroup;
 			children = (
+				6E68C8A62AEE88C3008EF6FD /* utils */,
 				6E42BB9D2AED6D0700F70D73 /* data */,
 				6E42BB9A2AED6B8C00F70D73 /* Views */,
 				6E42BB992AED6B7800F70D73 /* Model */,
@@ -103,6 +108,7 @@
 				6E42BBA62AED73EB00F70D73 /* WeatherViewModel.swift */,
 				6E68C8A22AEE5860008EF6FD /* DeatailWeatherView.swift */,
 				6E68C8A02AEE4D24008EF6FD /* AddCityView.swift */,
+				6E68C8A42AEE79CB008EF6FD /* WeatherViews.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -113,6 +119,14 @@
 				6E42BBA42AED6E3400F70D73 /* LocalWeatherCityDataProvider.swift */,
 			);
 			path = data;
+			sourceTree = "<group>";
+		};
+		6E68C8A62AEE88C3008EF6FD /* utils */ = {
+			isa = PBXGroup;
+			children = (
+				6E68C8A72AEE88F6008EF6FD /* Utilities.swift */,
+			);
+			path = utils;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -187,9 +201,11 @@
 			files = (
 				6E42BB9C2AED6BB800F70D73 /* WeatherCity.swift in Sources */,
 				6E42BB8E2AEBB07D00F70D73 /* WeatherAppView.swift in Sources */,
+				6E68C8A52AEE79CB008EF6FD /* WeatherViews.swift in Sources */,
 				6E42BBA12AED6DB400F70D73 /* Pollution.swift in Sources */,
 				6E42BBA52AED6E3400F70D73 /* LocalWeatherCityDataProvider.swift in Sources */,
 				6E42BB9F2AED6DA500F70D73 /* Location.swift in Sources */,
+				6E68C8A82AEE88F6008EF6FD /* Utilities.swift in Sources */,
 				6E42BBA72AED73EB00F70D73 /* WeatherViewModel.swift in Sources */,
 				6E42BBA32AED6DCB00F70D73 /* Weather.swift in Sources */,
 				6E68C8A12AEE4D24008EF6FD /* AddCityView.swift in Sources */,

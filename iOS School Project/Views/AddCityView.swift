@@ -10,6 +10,7 @@ import SwiftUI
 
 struct AddCityView: View {
     var model: WeatherViewModel
+    @Binding var isShown: Bool
     
     @State private var selectedCountry: String = ""
     @State private var selectedState: String = ""
@@ -30,7 +31,11 @@ struct AddCityView: View {
     }
     
     private var title: some View {
-        Text("Add a new city").font(.system(size: 50)).padding(.bottom, 50)
+        HStack{
+            Text("Add a new city").font(.system(size: 40))
+            Spacer()
+            closeButton
+        }.padding(EdgeInsets(top: 20, leading: 20, bottom: 50, trailing: 20))
     }
     
     private var addButton: some View{
@@ -39,10 +44,22 @@ struct AddCityView: View {
             Button(action: {
                 // Handle add city action
             }, label: {
-                Text("Add city")
+                Text("Add city").font(.largeTitle)
             }).disabled(selectedCountry.isEmpty || selectedState.isEmpty || selectedCity.isEmpty)
             Spacer()
         }
+    }
+    
+    private var closeButton: some View{
+        Button(action:{
+            isShown.toggle()
+        },label: {
+            Image(systemName: "xmark.circle")
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 30, height: 30)
+                //.foregroundColor(.blue)
+        })
     }
 }
 
@@ -145,7 +162,7 @@ struct Selector<T: Hashable>: View {
 
 
 
-#Preview {
-    AddCityView(model: WeatherViewModel())
-}
+//#Preview {
+//    AddCityView(model: WeatherViewModel())
+//}
 

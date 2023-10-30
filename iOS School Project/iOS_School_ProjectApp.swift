@@ -12,7 +12,7 @@ struct iOS_School_ProjectApp: App {
     var body: some Scene {
         WindowGroup {
             let model = WeatherViewModel()
-            WeatherAppView(model: model)
+            WeatherAppView(model: model).background(Color.black)
         }
     }
 }

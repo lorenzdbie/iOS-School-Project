@@ -34,7 +34,7 @@ struct AddCityView: View {
     
     private var title: some View {
         HStack{
-            Text("Add a new city").font(.system(size: 40))
+            Text("Add a new city").font(.largeTitle)
             Spacer()
             closeButton
         }.padding(EdgeInsets(top: 20, leading: 20, bottom: 50, trailing: 20))
@@ -76,12 +76,13 @@ struct Selector<T: Hashable>: View {
             Text("\(title): ")
                Spacer()
             Picker(title, selection: $selectedItem) {
-                Text("Select ... ").tag("").colorInvert()
+                Text("Select ... ").tag("")
                 ForEach(items, id: \.self) { item in
                     Text("\(item)")
                 }
             }
         }
+        
         .padding(.horizontal, 20)
     }
 }

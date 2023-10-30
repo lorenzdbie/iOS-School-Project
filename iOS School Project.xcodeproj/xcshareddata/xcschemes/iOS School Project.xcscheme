@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "6E42BB872AEBB07D00F70D73"
-               BuildableName = "iOS School Project.app"
+               BuildableName = "Weather App.app"
                BlueprintName = "iOS School Project"
                ReferencedContainer = "container:iOS School Project.xcodeproj">
             </BuildableReference>
@@ -44,7 +44,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "6E42BB872AEBB07D00F70D73"
-            BuildableName = "iOS School Project.app"
+            BuildableName = "Weather App.app"
             BlueprintName = "iOS School Project"
             ReferencedContainer = "container:iOS School Project.xcodeproj">
          </BuildableReference>
@@ -61,7 +61,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "6E42BB872AEBB07D00F70D73"
-            BuildableName = "iOS School Project.app"
+            BuildableName = "Weather App.app"
             BlueprintName = "iOS School Project"
             ReferencedContainer = "container:iOS School Project.xcodeproj">
          </BuildableReference>

@@ -7,25 +7,21 @@
 
 import SwiftUI
 
-
-
 struct WeatherAppView: View {
     @ObservedObject var model: WeatherViewModel
     @State public var isPopoverPresented: Bool = false
     @Environment(\.colorScheme) var colorScheme
     var textColor:Color { colorScheme == .dark ? .white : .black}
-    var modeColor: Color { colorScheme == .dark ? .gray : .gray}
+    var modeColor: Color { colorScheme == .dark ? .gray : .lightGray}
     
     var body: some View {
         NavigationView {
-           mainView
+            mainView
         }
         .navigationViewStyle(StackNavigationViewStyle())
         .navigationBarHidden(true)
         .background(NavigationLink("", destination: EmptyView()).opacity(0))
-        }
-
-    
+    }
     
     private var mainView: some View{
         VStack {
@@ -69,7 +65,7 @@ struct WeatherAppView: View {
         }
     }
 }
-    
+
 
 struct CityCard: View {
     let city: WeatherCity
@@ -107,11 +103,6 @@ struct CityCard: View {
             windDirection(weather.windDirection, size: ViewSize.small).padding(.bottom, 10)
         }.padding(.top, 15)
     }
-}
-
-
-private func getSystemFontSize()-> CGFloat{
-    return UIFont.preferredFont(forTextStyle: .largeTitle).pointSize
 }
 
 #Preview {

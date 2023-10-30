@@ -6,7 +6,12 @@
 //
 
 import Foundation
+import SwiftUI
 
 enum ViewSize{
     case small, large
+}
+
+func getSystemFontSize()-> CGFloat{
+    return UIFont.preferredFont(forTextStyle: .largeTitle).pointSize
 }

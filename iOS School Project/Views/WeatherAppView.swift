@@ -100,8 +100,8 @@ struct CityCard: View {
         VStack{
             temperture(weather.temperature, size: ViewSize.small).fontWeight(.light).font(.caption)
             Spacer().frame(height: getSystemFontSize())
-            windDirection(weather.windDirection, size: ViewSize.small).padding(.bottom, 10)
-        }.padding(.top, 15)
+            windDirection(weather.windDirection, size: ViewSize.small).fontWeight(.light).font(.caption)
+        }.padding(.vertical, 15)
     }
 }
 

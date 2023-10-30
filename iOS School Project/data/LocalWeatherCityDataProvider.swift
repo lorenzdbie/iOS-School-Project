@@ -59,7 +59,7 @@ struct LocalWeatherCityDataProvider{
                     atmosphericPressure: 1016,
                     humidity: 81,
                     windSpeed: 4.12,
-                    windDirection: 200,
+                    windDirection: 12,
                     weatherIcon: "02n"),
                 pollution: Pollution(
                     timeStamp: "2023-10-28T10:00:00.000Z",

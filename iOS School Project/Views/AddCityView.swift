@@ -17,17 +17,19 @@ struct AddCityView: View {
     @State private var selectedCity: String = ""
     
     var body: some View {
-        title
-        Selector(title: "Country", items: model.locationProvider.getCountries(), selectedItem: $selectedCountry)
-        if !selectedCountry.isEmpty {
-            Selector(title: "State", items: model.locationProvider.getStates(country: selectedCountry) ?? [], selectedItem: $selectedState)
-        }
-        if !selectedState.isEmpty {
-            Selector(title: "City", items: model.locationProvider.getCities(country: selectedCountry, state: selectedState) ?? [], selectedItem: $selectedCity)
-        }
-        Spacer()
-        addButton
-        Spacer().frame(height: 30)
+        VStack{
+            title
+            Selector(title: "Country", items: model.locationProvider.getCountries(), selectedItem: $selectedCountry)
+            if !selectedCountry.isEmpty {
+                Selector(title: "State", items: model.locationProvider.getStates(country: selectedCountry) ?? [], selectedItem: $selectedState)
+            }
+            if !selectedState.isEmpty {
+                Selector(title: "City", items: model.locationProvider.getCities(country: selectedCountry, state: selectedState) ?? [], selectedItem: $selectedCity)
+            }
+            Spacer()
+            addButton
+            Spacer().frame(height: 30)
+        }.frame(height: 400)
     }
     
     private var title: some View {
@@ -74,7 +76,7 @@ struct Selector<T: Hashable>: View {
             Text("\(title): ")
                Spacer()
             Picker(title, selection: $selectedItem) {
-                Text("Select ... ").tag("")
+                Text("Select ... ").tag("").colorInvert()
                 ForEach(items, id: \.self) { item in
                     Text("\(item)")
                 }

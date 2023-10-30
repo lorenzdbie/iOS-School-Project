@@ -7,10 +7,13 @@
 
 import SwiftUI
 
+
+
 struct WeatherAppView: View {
     @ObservedObject var model: WeatherViewModel
     @State public var isPopoverPresented: Bool = false
     @Environment(\.colorScheme) var colorScheme
+    var textColor:Color { colorScheme == .dark ? .white : .black}
     var modeColor: Color { colorScheme == .dark ? .gray : .gray}
     
     var body: some View {
@@ -29,7 +32,7 @@ struct WeatherAppView: View {
             title
             ForEach(model.cityList) { city in
                 NavigationLink(destination: DetailsWeatherView(city: city)) {
-                    CityCard(city: city, modeColor: modeColor)
+                    CityCard(city: city, modeColor: modeColor, textColor: textColor)
                 }
             }
             Spacer()
@@ -58,9 +61,9 @@ struct WeatherAppView: View {
                     .foregroundColor(modeColor)
                     .padding(20)
             }
-            .sheet(isPresented: $isPopoverPresented) {
-                AddCityView(model: model, isShown: $isPopoverPresented).background(RoundedRectangle(cornerRadius: 30)
-                    .opacity(0.3)).padding(20)
+            .popover(isPresented: $isPopoverPresented) {
+                AddCityView(model: model, isShown: $isPopoverPresented).background(RoundedRectangle(cornerRadius: 40)
+                    .opacity(0.3)).padding(10)
             }
             Spacer()
         }
@@ -71,7 +74,8 @@ struct WeatherAppView: View {
 struct CityCard: View {
     let city: WeatherCity
     let modeColor: Color
-    @State private var yOffset: CGFloat = 50 // Initial offset
+    let textColor: Color
+    @State private var yOffset: CGFloat = 100 // Initial offset
     
     var body: some View {
         let background = RoundedRectangle(cornerRadius: 15)
@@ -82,11 +86,12 @@ struct CityCard: View {
                 Text(city.city.name).font(.title).padding(.leading, 10)
                 Spacer()
                 tempCard(city.weather)
-                weatherIcon(city.weather.weatherIcon)
+                weatherIcon(city.weather.weatherIcon).frame(height: 70)
             }
             .background(RoundedRectangle(cornerRadius: 15.0).foregroundColor(modeColor)).padding(1)
         }
-        .background(background).frame(height: 70)
+        .foregroundColor(textColor)
+        .background(background)
         .offset(y: yOffset)
         .onAppear {
             withAnimation(.easeInOut(duration: 0.5)) {
@@ -98,12 +103,16 @@ struct CityCard: View {
     private func tempCard(_ weather: Weather)-> some View{
         VStack{
             temperture(weather.temperature, size: ViewSize.small).fontWeight(.light).font(.caption)
-         Spacer()
+            Spacer().frame(height: getSystemFontSize())
             windDirection(weather.windDirection, size: ViewSize.small).padding(.bottom, 10)
         }.padding(.top, 15)
     }
 }
 
+
+private func getSystemFontSize()-> CGFloat{
+    return UIFont.preferredFont(forTextStyle: .largeTitle).pointSize
+}
 
 #Preview {
     WeatherAppView(model: WeatherViewModel())

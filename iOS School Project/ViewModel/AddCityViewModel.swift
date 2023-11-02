@@ -39,6 +39,7 @@ class AddCityViewModel: ObservableObject{
         var citiesUrlString: String{
             "\(baseUrl)cities?state=\(state)&country=\(country)&\(secretKey)"
         }
+        print(citiesUrlString)
         loadCitiesData(url: citiesUrlString)
     }
 }
@@ -47,89 +48,73 @@ extension AddCityViewModel{
     
     @MainActor
     func fetchCountriesAsync() async throws{
-        
         do{
-                       guard let url = URL(string: countriesUrlString) else {
-                          throw WeatherError.invalidURL
-                        }
-                       let (data, response) = try await URLSession.shared.data(from: url)
+            guard let url = URL(string: countriesUrlString) else { throw WeatherError.invalidURL }
+            let (data, response) = try await URLSession.shared.data(from: url)
             guard (response as? HTTPURLResponse)?.statusCode == 200 else { throw WeatherError.serverError }
-            let json = try JSONSerialization.jsonObject(with: data, options: [])
-           print("API Response: \(json)")
-            guard let countries = try? JSONDecoder().decode(CountriesResponse.self, from: data) else {
-                print("error")
-                throw WeatherError.invalidData}
-            
-            print("countries: \(countries)")
+            //            let json = try JSONSerialization.jsonObject(with: data, options: [])
+            //            print("API Response: \(json)")
+            guard let countries = try? JSONDecoder().decode(CountriesResponse.self, from: data) else { throw WeatherError.invalidData }
+            //            print("countries: \(countries)")
             self.countries = countries.data
         } catch {
             self.error = error
         }
-        
     }
+    
     func loadCountriesData(){
         Task(priority: .medium){
-       try await fetchCountriesAsync()
+            try await fetchCountriesAsync()
         }
     }
     
+    
     @MainActor
     func fetchStatesAsync(statesUrl: String) async throws{
-        
         do{
-                       guard let url = URL(string: statesUrl) else {
-                          throw WeatherError.invalidURL
-                        }
-                       let (data, response) = try await URLSession.shared.data(from: url)
+            guard let url = URL(string: statesUrl) else { throw WeatherError.invalidURL }
+            let (data, response) = try await URLSession.shared.data(from: url)
             guard (response as? HTTPURLResponse)?.statusCode == 200 else { throw WeatherError.serverError }
-            let json = try JSONSerialization.jsonObject(with: data, options: [])
-           print("API Response: \(json)")
-            guard let states = try? JSONDecoder().decode(StateResponse.self, from: data) else {
-                print("error")
-                throw WeatherError.invalidData}
-            
-            print("states: \(states)")
+            //            let json = try JSONSerialization.jsonObject(with: data, options: [])
+            //            print("API Response: \(json)")
+            guard let states = try? JSONDecoder().decode(StateResponse.self, from: data) else { throw WeatherError.invalidData }
+            //            print("states: \(states)")
             self.states = states.data
         } catch {
             self.error = error
         }
-        
     }
+    
     func loadStatesData(url: String){
         Task(priority: .medium){
             try await fetchStatesAsync(statesUrl: url)
         }
     }
     
+    
     @MainActor
     func fetchCitiesAsync(citiesUrl: String) async throws{
-        
         do{
-                       guard let url = URL(string: citiesUrl) else {
-                          throw WeatherError.invalidURL
-                        }
-                       let (data, response) = try await URLSession.shared.data(from: url)
+            guard let url = URL(string: citiesUrl) else { throw WeatherError.invalidURL }
+            let (data, response) = try await URLSession.shared.data(from: url)
             guard (response as? HTTPURLResponse)?.statusCode == 200 else { throw WeatherError.serverError }
-            let json = try JSONSerialization.jsonObject(with: data, options: [])
-           print("API Response: \(json)")
-            guard let cities = try? JSONDecoder().decode(CityResponse.self, from: data) else {
-                print("error")
-                throw WeatherError.invalidData}
-            
-            print("cities: \(cities)")
+            //            let json = try JSONSerialization.jsonObject(with: data, options: [])
+            //            print("API Response: \(json)")
+            guard let cities = try? JSONDecoder().decode(CityResponse.self, from: data) else { throw WeatherError.invalidData }
+            //            print("cities: \(cities)")
             self.cities = cities.data
         } catch {
             self.error = error
         }
-        
     }
+    
     func loadCitiesData(url: String){
         Task(priority: .medium){
             try await fetchCitiesAsync(citiesUrl: url)
         }
     }
 }
-    
+
 // MARK - API structs
 
 struct ApiCountry: Codable, Hashable{
@@ -149,9 +134,9 @@ struct StateResponse: Decodable{
     let data: [ApiState]
 }
 
-    
+
 struct ApiCity: Codable, Hashable{
- var city: String
+    var city: String
 }
 struct CityResponse: Decodable{
     let status: String

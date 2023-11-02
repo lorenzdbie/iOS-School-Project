@@ -81,8 +81,7 @@ struct Selector<T: Hashable>: View {
                     Text("\(item)")
                 }
             }
-        }
-        
+        }        
         .padding(.horizontal, 20)
     }
 }

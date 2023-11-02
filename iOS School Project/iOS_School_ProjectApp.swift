@@ -9,10 +9,18 @@ import SwiftUI
 
 @main
 struct iOS_School_ProjectApp: App {
+    
+    @ObservedObject var locationManager = LocationManager.shared
     var body: some Scene {
         WindowGroup {
-            let model = WeatherViewModel()
-            WeatherAppView(model: model).background(Color.black)
+            Group{
+                if locationManager.userLocation == nil {
+                    LocationRequestView()
+                }else {
+                    let model = WeatherViewModel()
+                    WeatherAppView(model: model).background(Color.black)
+                }
+            }
         }
     }
 }

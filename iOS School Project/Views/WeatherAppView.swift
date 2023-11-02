@@ -9,6 +9,7 @@ import SwiftUI
 
 struct WeatherAppView: View {
     @ObservedObject var model: WeatherViewModel
+    @ObservedObject var loctionManager = LocationManager.shared
     @State public var isPopoverPresented: Bool = false
     @Environment(\.colorScheme) var colorScheme
     var textColor:Color { colorScheme == .dark ? .white : .black}
@@ -26,10 +27,20 @@ struct WeatherAppView: View {
     private var mainView: some View{
         VStack {
             title
+            if let location = loctionManager.userLocation{
+                Text("Longitude = \(location.coordinate.longitude)")
+                Text("Latitude = \(location.coordinate.latitude)")
+            }
+  
             List{
+                NavigationLink(destination: DetailsWeatherView(city: model.cityList[0])){
+                        Image(systemName: "location").font(.title2)
+                        CityCard(city: model.cityList[0])
+                }.deleteDisabled(true).moveDisabled(true)
+                
                 ForEach(model.cityList) { city in
                     NavigationLink(destination: DetailsWeatherView(city: city)) {
-                        CityCard(city: city/*, modeColor: modeColor, textColor: textColor*/)
+                        CityCard(city: city)
                     }
                 }.onDelete{ indexSet in
                     withAnimation{
@@ -43,7 +54,7 @@ struct WeatherAppView: View {
             Spacer()
             addButton
         }
-       // .padding(5)
+    
     }
     
     private var title: some View{
@@ -78,30 +89,24 @@ struct WeatherAppView: View {
 
 struct CityCard: View {
     let city: WeatherCity
-  //  let modeColor: Color
-   // let textColor: Color
     @State private var yOffset: CGFloat = 100 // Initial offset
     
     var body: some View {
-//        let background = RoundedRectangle(cornerRadius: 15)
-//            .foregroundColor(.accentColor).opacity(0.3)
-        
+
         ZStack {
             HStack {
-                Text(city.city.name).font(.title).padding(.leading, 10).lineLimit(/*@START_MENU_TOKEN@*/2/*@END_MENU_TOKEN@*/)
+                Text(city.city.name).font(.title)/*.padding(.leading, 10)*/.lineLimit(/*@START_MENU_TOKEN@*/2/*@END_MENU_TOKEN@*/)
                 Spacer()
                 tempCard(city.weather)
                 weatherIcon(city.weather.weatherIcon).frame(height: 70)
             }
-           // .background(RoundedRectangle(cornerRadius: 15.0).foregroundColor(modeColor)).padding(1)
         }
-      //  .foregroundColor(textColor)
-       // .background(background)
+
         .offset(y: yOffset)
-        .onAppear {
-            withAnimation(.easeInOut(duration: 0.5)) {
-                yOffset = 0
-            }
+//        .onAppear {
+//            withAnimation(.easeInOut(duration: 0.5)) {
+//                yOffset = 0
+//            }
         }
     }
     

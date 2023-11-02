@@ -9,8 +9,9 @@ import SwiftUI
 
 struct WeatherAppView: View {
     @ObservedObject var model: WeatherViewModel
-    @ObservedObject var loctionManager = LocationManager.shared
-    @State public var isPopoverPresented: Bool = false
+    //@ObservedObject var loctionManager = LocationManager.shared
+    @State public var isPopoverPresented = false
+    @State private var showAlert = false
     @Environment(\.colorScheme) var colorScheme
     var textColor:Color { colorScheme == .dark ? .white : .black}
     var modeColor: Color { colorScheme == .dark ? .gray : .lightGray}
@@ -18,7 +19,14 @@ struct WeatherAppView: View {
     var body: some View {
         NavigationView {
             mainView
-        }
+        }.onReceive(model.$error, perform: { error in
+            if error != nil {
+                showAlert.toggle()
+            }
+        }).alert(isPresented: $showAlert, content: {
+            Alert(title:Text("Error"),
+                  message: Text(model.error?.localizedDescription ?? ""))
+        })
         .navigationViewStyle(StackNavigationViewStyle())
         .navigationBarHidden(true)
         .background(NavigationLink("", destination: EmptyView()).opacity(0))
@@ -27,16 +35,29 @@ struct WeatherAppView: View {
     private var mainView: some View{
         VStack {
             title
-            if let location = loctionManager.userLocation{
-                Text("Longitude = \(location.coordinate.longitude)")
-                Text("Latitude = \(location.coordinate.latitude)")
-            }
+//           // if let location = loctionManager.userLocation{
+//            Text("Longitude = \(model.long!)")
+//            Text("Latitude = \(model.lat!)")
+//                Button{
+////                    model.long = location.coordinate.longitude
+////                    model.lat = location.coordinate.latitude
+//                    //model.fetchDataFromAPI()
+//                } label: {
+//                    Text("fetch weather for location")
+//                }
+//            //}
   
             List{
-                NavigationLink(destination: DetailsWeatherView(city: model.cityList[0])){
-                        Image(systemName: "location").font(.title2)
-                        CityCard(city: model.cityList[0])
-                }.deleteDisabled(true).moveDisabled(true)
+                if let localCity = model.localCity{
+                    NavigationLink(destination: DetailsWeatherView(city: localCity)){
+                            Image(systemName: "location").font(.title2)
+                            CityCard(city: localCity)
+                    }.deleteDisabled(true)
+                        .moveDisabled(true)
+                        .refreshable {
+                        model.handleRefresh()
+                    }
+                    }
                 
                 ForEach(model.cityList) { city in
                     NavigationLink(destination: DetailsWeatherView(city: city)) {
@@ -102,12 +123,12 @@ struct CityCard: View {
             }
         }
 
-        .offset(y: yOffset)
+ //       .offset(y: yOffset)
 //        .onAppear {
 //            withAnimation(.easeInOut(duration: 0.5)) {
 //                yOffset = 0
 //            }
-        }
+ //       }
     }
     
     private func tempCard(_ weather: Weather)-> some View{

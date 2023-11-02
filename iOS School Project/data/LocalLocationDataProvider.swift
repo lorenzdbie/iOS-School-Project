@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct LocationDataProvider{
+struct LocalLocationDataProvider{
     
     var countries = ["Belgium":
                         ["Flanders":

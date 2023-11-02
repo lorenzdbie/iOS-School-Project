@@ -14,10 +14,11 @@ struct iOS_School_ProjectApp: App {
     var body: some Scene {
         WindowGroup {
             Group{
+                let model = WeatherViewModel()
+                
                 if locationManager.userLocation == nil {
                     LocationRequestView()
                 }else {
-                    let model = WeatherViewModel()
                     WeatherAppView(model: model).background(Color.black)
                 }
             }

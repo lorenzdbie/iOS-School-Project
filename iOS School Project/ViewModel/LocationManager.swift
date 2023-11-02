@@ -16,7 +16,8 @@ class LocationManager: NSObject, ObservableObject{
     override init(){
         super.init()
         manager.delegate = self
-        manager.desiredAccuracy = kCLLocationAccuracyBest
+        manager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
+        manager.distanceFilter = 100
         manager.startUpdatingLocation()
     }
     func requestLocation(){

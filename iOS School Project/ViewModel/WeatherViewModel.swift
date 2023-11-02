@@ -1,0 +1,152 @@
+//
+//  WeatherViewModel.swift
+//  iOS School Project
+//
+//  Created by Lorenz De Bie on 28/10/2023.
+//
+
+import SwiftUI
+import CoreLocation
+
+class WeatherViewModel: ObservableObject{
+    
+    private let cityProvider = LocalWeatherCityDataProvider()
+    let locationProvider = LocalLocationDataProvider()
+    
+    
+    @Published var cityList: [WeatherCity]
+    @Published var currentCity: WeatherCity
+    @Published var localCity: WeatherCity?
+    private var long:Double = 0
+    private var lat: Double = 0
+    @Published var error: Error?
+    
+    
+    init() {
+        cityList = cityProvider.getWeatherCityData()
+        currentCity = cityProvider.defaultWeather
+        long = LocationManager.shared.userLocation?.coordinate.longitude ?? 0
+        lat = LocationManager.shared.userLocation?.coordinate.latitude ?? 0
+        loadData()
+    }
+    
+    func handleRefresh(){
+        long = LocationManager.shared.userLocation?.coordinate.longitude ?? 0
+        lat = LocationManager.shared.userLocation?.coordinate.latitude ?? 0
+        loadData()
+    }
+}
+
+
+    //MARK: - Async/Await
+extension WeatherViewModel{
+@MainActor
+    func fetchLocationDataFromAPI() async throws {
+        let urlString = "https://api.airvisual.com/v2/nearest_city?lat=\(lat)&lon=\(long)&key=efc93cd2-4e04-445e-beec-c8e9d2b5aca1"
+        do{
+            guard let url = URL(string: urlString) else {
+                throw WeathercityError.invalidURL
+            }
+          //  print(url)
+            let (data, response) = try await URLSession.shared.data(from: url)
+            
+            guard (response as? HTTPURLResponse)?.statusCode == 200 else { throw WeathercityError.serverError }
+            let json = try JSONSerialization.jsonObject(with: data, options: [])
+            print("API Response: \(json)")
+            guard let weatherCity = try? parseWeatherCity(from: data) else { throw WeathercityError.invalidData }
+            //print(weatherCity)
+            self.localCity = weatherCity
+        }catch {
+            self.error = error
+        }
+    }
+
+    
+    func loadData(){
+        Task(priority: .medium){
+       try await fetchLocationDataFromAPI()
+        }
+    }
+    
+    func parseWeatherCity(from jsonData: Data) throws -> WeatherCity? {
+            let jsonDecoder = JSONDecoder()
+            let weatherData = try jsonDecoder.decode(WeatherData.self, from: jsonData)
+            
+            let city = City(
+                weatherData.data.city,
+               state: CityState(
+                weatherData.data.state,
+                   country: Country(
+                    weatherData.data.country)
+               ))
+            
+            let location = Location(
+                longitude: Double(weatherData.data.location.coordinates[0]),
+                latitude: Double(weatherData.data.location.coordinates[1])
+            )
+            
+            let weather = Weather(
+                timeStamp: weatherData.data.current.weather.ts,
+                temperature: weatherData.data.current.weather.tp,
+                atmosphericPressure: weatherData.data.current.weather.pr,
+                humidity: weatherData.data.current.weather.hu,
+                windSpeed: weatherData.data.current.weather.ws,
+                windDirection: weatherData.data.current.weather.wd,
+                weatherIcon: weatherData.data.current.weather.ic
+            )
+            
+            let pollution = Pollution(
+                timeStamp: weatherData.data.current.pollution.ts,
+                aqiUsa: weatherData.data.current.pollution.aqius,
+                mainUsa: weatherData.data.current.pollution.mainus,
+                aqiChina: weatherData.data.current.pollution.aqicn,
+                mainChina: weatherData.data.current.pollution.maincn
+            )
+            
+            return WeatherCity(city: city, location: location, weather: weather, pollution: pollution)
+        }
+    }
+
+
+struct WeatherData: Codable {
+    let data: WeatherDataInfo
+    let status: String
+}
+
+struct WeatherDataInfo: Codable {
+    let city: String
+    let country: String
+    let state: String
+    let current: WeatherDetails
+    let location: LocationInfo
+}
+
+struct WeatherDetails: Codable {
+    let weather: WeatherInfo
+    let pollution: PollutionInfo
+}
+
+struct WeatherInfo: Codable {
+    let ts: String
+    let hu: Float
+    let ic: String
+    let pr: Float
+    let tp: Float
+    let wd: Float
+   let ws: Float
+}
+
+struct PollutionInfo: Codable {
+    let ts: String
+    let aqicn: Float
+    let maincn: String
+    let aqius: Float
+    let mainus: String
+}
+
+struct LocationInfo: Codable {
+    let coordinates: [Double]
+    let type: String
+}
+
+

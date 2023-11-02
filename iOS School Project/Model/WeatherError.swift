@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum WeathercityError: Error, LocalizedError{
+enum WeatherError: Error, LocalizedError{
     case invalidURL
     case serverError
     case invalidData

@@ -30,10 +30,21 @@ class WeatherViewModel: ObservableObject{
         loadData()
     }
     
+    func addCity(country:String, state: String, city: String){
+        print(country)
+        print(state)
+        print(city)
+        var urlString: String{
+                    "https://api.airvisual.com/v2/city?city=\(city)&state=\(state)&country=\(country)&key=efc93cd2-4e04-445e-beec-c8e9d2b5aca1"
+        }
+        print(urlString)
+        loadCityData(cityUrl: urlString)
+    }
+    
     func handleRefresh(){
         long = LocationManager.shared.userLocation?.coordinate.longitude ?? 0
         lat = LocationManager.shared.userLocation?.coordinate.latitude ?? 0
-        loadData()
+       // loadData()
     }
 }
 
@@ -45,15 +56,15 @@ extension WeatherViewModel{
         let urlString = "https://api.airvisual.com/v2/nearest_city?lat=\(lat)&lon=\(long)&key=efc93cd2-4e04-445e-beec-c8e9d2b5aca1"
         do{
             guard let url = URL(string: urlString) else {
-                throw WeathercityError.invalidURL
+                throw WeatherError.invalidURL
             }
           //  print(url)
             let (data, response) = try await URLSession.shared.data(from: url)
             
-            guard (response as? HTTPURLResponse)?.statusCode == 200 else { throw WeathercityError.serverError }
+            guard (response as? HTTPURLResponse)?.statusCode == 200 else { throw WeatherError.serverError }
             let json = try JSONSerialization.jsonObject(with: data, options: [])
             print("API Response: \(json)")
-            guard let weatherCity = try? parseWeatherCity(from: data) else { throw WeathercityError.invalidData }
+            guard let weatherCity = try? parseWeatherCity(from: data) else { throw WeatherError.invalidData }
             //print(weatherCity)
             self.localCity = weatherCity
         }catch {
@@ -67,6 +78,35 @@ extension WeatherViewModel{
        try await fetchLocationDataFromAPI()
         }
     }
+    
+    @MainActor
+    func fetchCityDataAsync(cityUrl: String) async throws {
+            do{
+                guard let url = URL(string: cityUrl) else {
+                    throw WeatherError.invalidURL
+                }
+              //  print(url)
+                let (data, response) = try await URLSession.shared.data(from: url)
+                
+                guard (response as? HTTPURLResponse)?.statusCode == 200 else { throw WeatherError.serverError }
+                let json = try JSONSerialization.jsonObject(with: data, options: [])
+                print("API Response: \(json)")
+                guard let weatherCity = try? parseWeatherCity(from: data) else { throw WeatherError.invalidData }
+                print(weatherCity)
+                self.cityList.append(weatherCity)
+               
+            }catch {
+                self.error = error
+            }
+        }
+
+        
+    func loadCityData(cityUrl: String){
+            Task(priority: .medium){
+           try await fetchCityDataAsync(cityUrl: cityUrl)
+            }
+        }
+    
     
     func parseWeatherCity(from jsonData: Data) throws -> WeatherCity? {
             let jsonDecoder = JSONDecoder()

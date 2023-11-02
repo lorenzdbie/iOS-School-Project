@@ -99,7 +99,9 @@ struct WeatherAppView: View {
                     .padding(20)
             }
             .popover(isPresented: $isPopoverPresented) {
-                AddCityView(model: model, isShown: $isPopoverPresented).background(RoundedRectangle(cornerRadius: 40)
+                AddCityView(model: model, isShown: $isPopoverPresented){
+                    isPopoverPresented = false
+                }.background(RoundedRectangle(cornerRadius: 40)
                     .opacity(0.3)).padding(10)
             }
             Spacer()

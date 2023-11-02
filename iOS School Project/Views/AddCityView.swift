@@ -9,8 +9,10 @@ import SwiftUI
 
 
 struct AddCityView: View {
-    var model: WeatherViewModel
+    @ObservedObject var model: WeatherViewModel
+    @ObservedObject var addModel = AddCityViewModel()
     @Binding var isShown: Bool
+    var onAddCity: ()-> Void
     
     @State private var selectedCountry: String = ""
     @State private var selectedState: String = ""
@@ -19,18 +21,74 @@ struct AddCityView: View {
     var body: some View {
         VStack{
             title
-            Selector(title: "Country", items: model.locationProvider.getCountries(), selectedItem: $selectedCountry)
-            if !selectedCountry.isEmpty {
-                Selector(title: "State", items: model.locationProvider.getStates(country: selectedCountry) ?? [], selectedItem: $selectedState)
-            }
-            if !selectedState.isEmpty {
-                Selector(title: "City", items: model.locationProvider.getCities(country: selectedCountry, state: selectedState) ?? [], selectedItem: $selectedCity)
-            }
+            selector
+            
+            
+//            Selector(title: "Country", items: model.locationProvider.getCountries(), selectedItem: $selectedCountry)
+//            if !selectedCountry.isEmpty {
+//                Selector(title: "State", items: model.locationProvider.getStates(country: selectedCountry) ?? [], selectedItem: $selectedState)
+//            }
+//            if !selectedState.isEmpty {
+//                Selector(title: "City", items: model.locationProvider.getCities(country: selectedCountry, state: selectedState) ?? [], selectedItem: $selectedCity)
+//            }
             Spacer()
             addButton
             Spacer().frame(height: 30)
         }.frame(height: 400)
+         .onChange(of: selectedCountry) {
+                addModel.getStatesForCountry(country: selectedCountry)
+            }
+         .onChange(of: selectedState) {
+             addModel.getCitiesForState(state: selectedState)
+         }
     }
+    
+    private var selector: some View {
+        VStack(alignment:.leading) {
+            HStack {
+                Text("Country: ")
+                Spacer()
+                Picker("Country", selection: $selectedCountry) {
+                    if selectedCountry.isEmpty{
+                        Text("Select ... ").tag("")
+                    }
+                    ForEach(addModel.countries, id: \.self) { country in
+                        Text(country.country).tag(country.country)
+                    }
+                }
+            }
+            if !selectedCountry.isEmpty {
+                
+                HStack {
+                    Text("State: ")
+                    Spacer()
+                    Picker("State", selection: $selectedState) {
+                        if selectedState.isEmpty{
+                            Text("Select ... ").tag("")
+                        }
+                        ForEach(addModel.states, id: \.self) { state in
+                            Text(state.state).tag(state.state)
+                        }
+                    }
+                }
+            }
+            if !selectedState.isEmpty {
+                HStack {
+                    Text("City: ")
+                    Spacer()
+                    Picker("City", selection: $selectedCity) {
+                        if selectedCity.isEmpty{
+                            Text("Select ... ").tag("")
+                        }
+                        ForEach(addModel.cities, id: \.self) { city in
+                            Text(city.city).tag(city.city)
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
     
     private var title: some View {
         HStack{
@@ -44,7 +102,8 @@ struct AddCityView: View {
         HStack{
             Spacer()
             Button(action: {
-                // Handle add city action
+                model.addCity(country: selectedCountry, state: selectedState, city: selectedCity)
+                onAddCity()
             }, label: {
                 Text("Add city").font(.largeTitle)
             }).disabled(selectedCountry.isEmpty || selectedState.isEmpty || selectedCity.isEmpty)

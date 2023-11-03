@@ -43,6 +43,7 @@ class WeatherViewModel: ObservableObject{
         loadCityData(cityUrl: urlString)
     }
     
+    
     func handleRefresh(){
         long = LocationManager.shared.userLocation?.coordinate.longitude ?? 0
         lat = LocationManager.shared.userLocation?.coordinate.latitude ?? 0

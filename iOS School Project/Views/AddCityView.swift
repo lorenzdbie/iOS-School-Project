@@ -24,64 +24,84 @@ struct AddCityView: View {
             selector
             
             
-//            Selector(title: "Country", items: model.locationProvider.getCountries(), selectedItem: $selectedCountry)
-//            if !selectedCountry.isEmpty {
-//                Selector(title: "State", items: model.locationProvider.getStates(country: selectedCountry) ?? [], selectedItem: $selectedState)
-//            }
-//            if !selectedState.isEmpty {
-//                Selector(title: "City", items: model.locationProvider.getCities(country: selectedCountry, state: selectedState) ?? [], selectedItem: $selectedCity)
-//            }
+            //            Selector(title: "Country", items: model.locationProvider.getCountries(), selectedItem: $selectedCountry)
+            //            if !selectedCountry.isEmpty {
+            //                Selector(title: "State", items: model.locationProvider.getStates(country: selectedCountry) ?? [], selectedItem: $selectedState)
+            //            }
+            //            if !selectedState.isEmpty {
+            //                Selector(title: "City", items: model.locationProvider.getCities(country: selectedCountry, state: selectedState) ?? [], selectedItem: $selectedCity)
+            //            }
             Spacer()
             addButton
             Spacer().frame(height: 30)
         }.frame(height: 400)
-         .onChange(of: selectedCountry) {
+            .onChange(of: selectedCountry) {
+                //                selectedState = ""
+                //                selectedCity = ""
+                //                addModel.states.removeAll()
                 addModel.getStatesForCountry(country: selectedCountry)
             }
-         .onChange(of: selectedState) {
-             addModel.getCitiesForState(state: selectedState)
-         }
+            .onChange(of: selectedState) {
+                //                selectedCity = ""
+                //                addModel.cities.removeAll()
+                addModel.getCitiesForState(state: selectedState)
+            }
     }
     
     private var selector: some View {
         VStack(alignment:.leading) {
             HStack {
-                Text("Country: ")
+                Text("Country: ").padding(10)
                 Spacer()
-                Picker("Country", selection: $selectedCountry) {
-                    if selectedCountry.isEmpty{
-                        Text("Select ... ").tag("")
-                    }
-                    ForEach(addModel.countries, id: \.self) { country in
-                        Text(country.country).tag(country.country)
+                if addModel.countries.isEmpty{
+                    Text("Loading ...").padding( 10)
+                }else{
+                    Picker("Country", selection: $selectedCountry) {
+                        
+                        if selectedCountry.isEmpty{
+                            Text("Select ... ").tag("")
+                        }
+                        ForEach(addModel.countries, id: \.self) { country in
+                            Text(country.country).tag(country.country)
+                        }
                     }
                 }
             }
-            if !selectedCountry.isEmpty {
+            if !selectedCountry.isEmpty{
                 
                 HStack {
-                    Text("State: ")
+                    Text("State: ").padding(10)
                     Spacer()
-                    Picker("State", selection: $selectedState) {
-                        if selectedState.isEmpty{
-                            Text("Select ... ").tag("")
-                        }
-                        ForEach(addModel.states, id: \.self) { state in
-                            Text(state.state).tag(state.state)
+                    if addModel.states.isEmpty{
+                        Text("Loading ...").padding( 10)
+                    } else{
+                        Picker("State", selection: $selectedState) {
+                            
+                            if selectedState.isEmpty{
+                                Text("Select ... ").tag("")
+                            }
+                            ForEach(addModel.states, id: \.self) { state in
+                                Text(state.state).tag(state.state)
+                            }
                         }
                     }
                 }
             }
             if !selectedState.isEmpty {
                 HStack {
-                    Text("City: ")
+                    Text("City: ").padding(10)
                     Spacer()
-                    Picker("City", selection: $selectedCity) {
-                        if selectedCity.isEmpty{
-                            Text("Select ... ").tag("")
-                        }
-                        ForEach(addModel.cities, id: \.self) { city in
-                            Text(city.city).tag(city.city)
+                    if addModel.cities.isEmpty {
+                        Text("Loading ...").padding(10)
+                    } else {
+                        Picker("City", selection: $selectedCity) {
+                            
+                            if selectedCity.isEmpty{
+                                Text("Select ... ").tag("")
+                            }
+                            ForEach(addModel.cities, id: \.self) { city in
+                                Text(city.city).tag(city.city)
+                            }
                         }
                     }
                 }
@@ -119,7 +139,7 @@ struct AddCityView: View {
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .frame(width: 30, height: 30)
-                //.foregroundColor(.blue)
+            //.foregroundColor(.blue)
         })
     }
 }
@@ -133,37 +153,37 @@ struct Selector<T: Hashable>: View {
     var body: some View {
         HStack{
             Text("\(title): ")
-               Spacer()
+            Spacer()
             Picker(title, selection: $selectedItem) {
                 Text("Select ... ").tag("")
                 ForEach(items, id: \.self) { item in
                     Text("\(item)")
                 }
             }
-        }        
+        }
         .padding(.horizontal, 20)
     }
 }
 
 
 //struct AddCityView: View {
-//    
+//
 //    var model: WeatherViewModel
-//    
+//
 //    @State var selectedCountry: String = ""
 //    @State var selectedState: String = ""
 //    @State var selectedCity: String = ""
-//    
+//
 //    var body: some View {
 //        title
 //        selector
 //        Spacer()
 //    }
-//    
+//
 //    private var title: some View {
 //        Text("Add a new city").font(.system(size: 50)).padding(.bottom, 50)
 //    }
-//    
+//
 //    private var selector: some View {
 //        VStack(alignment:.leading) {
 //            HStack {

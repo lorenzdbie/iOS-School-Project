@@ -27,62 +27,58 @@ struct WeatherAppView: View {
             Alert(title:Text("Error"),
                   message: Text(model.error?.localizedDescription ?? ""))
         })
-        .navigationViewStyle(StackNavigationViewStyle())
-        .navigationBarHidden(true)
-        .background(NavigationLink("", destination: EmptyView()).opacity(0))
+        //.navigationViewStyle(StackNavigationViewStyle())
+        //.navigationBarHidden(true)
+        //.background(NavigationLink("", destination: EmptyView()).opacity(0))
     }
     
     private var mainView: some View{
-        VStack {
-            title
-//           // if let location = loctionManager.userLocation{
-//            Text("Longitude = \(model.long!)")
-//            Text("Latitude = \(model.lat!)")
-//                Button{
-////                    model.long = location.coordinate.longitude
-////                    model.lat = location.coordinate.latitude
-//                    //model.fetchDataFromAPI()
-//                } label: {
-//                    Text("fetch weather for location")
-//                }
-//            //}
-  
-            List{
-                if let localCity = model.localCity{
-                    NavigationLink(destination: DetailsWeatherView(city: localCity)){
-                            Image(systemName: "location").font(.title2)
-                            CityCard(city: localCity)
-                    }.deleteDisabled(true)
-                        .moveDisabled(true)
-                        .refreshable {
-                        model.handleRefresh()
-                    }
-                    }
-                
-                ForEach(model.cityList) { city in
-                    NavigationLink(destination: DetailsWeatherView(city: city)) {
-                        CityCard(city: city)
-                    }
-                }.onDelete{ indexSet in
-                    withAnimation{
-                        model.cityList.remove(atOffsets: indexSet)
-                    }
-                }
-                .onMove { indexSet, newOffset in
-                    model.cityList.move(fromOffsets: indexSet, toOffset: newOffset)
-                }
+        ZStack(alignment: .bottomTrailing){
+            VStack {
+                title
+                cityList
             }
-            Spacer()
             addButton
         }
-    
     }
     
     private var title: some View{
         HStack{
-            Image("01n").resizable().scaledToFit()
-            Text("Weather").font(.system(size: 50))
-        }.frame(height: 50)//.padding(.bottom, 15)
+            let icon = model.localCity?.weather.weatherIcon ?? "01d"
+            Image("\(icon)")
+                .resizable()
+                .scaledToFit()
+            Text("Weather")
+                .font(.system(size: 50))
+        }.frame(height: 50)
+    }
+    
+    private var cityList: some View {
+        List{
+            if let localCity = model.localCity{
+                NavigationLink(destination: DetailsWeatherView(city: localCity)){
+                    Image(systemName: "location")
+                        .font(.title2)
+                    CityCard(city: localCity)
+                }.deleteDisabled(true)
+                    .moveDisabled(true)
+                    .refreshable {
+                        model.handleRefresh()
+                    }
+            }
+            ForEach(model.cityList) { city in
+                NavigationLink(destination: DetailsWeatherView(city: city)) {
+                    CityCard(city: city)
+                }
+            }.onDelete{ indexSet in
+                withAnimation{
+                    model.cityList.remove(atOffsets: indexSet)
+                }
+            }
+            .onMove { indexSet, newOffset in
+                model.cityList.move(fromOffsets: indexSet, toOffset: newOffset)
+            }
+        }
     }
     
     private var addButton: some View{
@@ -94,16 +90,18 @@ struct WeatherAppView: View {
                 Image(systemName: "plus.circle.fill")
                     .resizable()
                     .aspectRatio(contentMode: .fit)
-                    .frame(width: 60, height: 60)
-                    .foregroundColor(modeColor)
-                    .padding(20)
-            }
-            .popover(isPresented: $isPopoverPresented) {
-                AddCityView(model: model, isShown: $isPopoverPresented){
-                    isPopoverPresented = false
-                }.background(RoundedRectangle(cornerRadius: 40)
-                    .opacity(0.3)).padding(10)
-            }
+                    .frame(width: 50, height: 50)
+                    .background(Color.blue)
+                    .foregroundColor(.white)
+                    .clipShape(Circle())
+                    .shadow(radius: 10)
+            }.padding(.bottom, 10)
+                .popover(isPresented: $isPopoverPresented) {
+                    AddCityView(model: model, isShown: $isPopoverPresented){
+                        isPopoverPresented = false
+                    }.background(RoundedRectangle(cornerRadius: 40)
+                        .opacity(0.3)).padding(10)
+                }
             Spacer()
         }
     }
@@ -115,22 +113,20 @@ struct CityCard: View {
     @State private var yOffset: CGFloat = 100 // Initial offset
     
     var body: some View {
-
         ZStack {
             HStack {
-                Text(city.city.name).font(.title)/*.padding(.leading, 10)*/.lineLimit(/*@START_MENU_TOKEN@*/2/*@END_MENU_TOKEN@*/)
+                Text(city.city.name).font(.title).lineLimit(/*@START_MENU_TOKEN@*/2/*@END_MENU_TOKEN@*/)
                 Spacer()
                 tempCard(city.weather)
                 weatherIcon(city.weather.weatherIcon).frame(height: 70)
             }
         }
-
- //       .offset(y: yOffset)
-//        .onAppear {
-//            withAnimation(.easeInOut(duration: 0.5)) {
-//                yOffset = 0
-//            }
- //       }
+        //       .offset(y: yOffset)
+        //        .onAppear {
+        //            withAnimation(.easeInOut(duration: 0.5)) {
+        //                yOffset = 0
+        //            }
+        //       }
     }
     
     private func tempCard(_ weather: Weather)-> some View{

@@ -80,20 +80,6 @@ class WeatherViewModel: ObservableObject{
 
 
 
-extension [WeatherCity]{
-    func json() throws -> Data {
-        let encoded = try JSONEncoder().encode(self)
-        print("WeatherCity list = \(String(data: encoded, encoding: .utf8) ?? "nil")")
-        return encoded
-    }
-    
-    init(json: Data) throws {
-        self = try JSONDecoder().decode([WeatherCity].self, from: json)
-    }
-}
-
-
-
 //MARK: - Async/Await
 extension WeatherViewModel{
     @MainActor

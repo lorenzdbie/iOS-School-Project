@@ -7,19 +7,19 @@
 
 import Foundation
 
-struct Country: Identifiable, Equatable{
+struct Country: Identifiable, Equatable, Codable{
 let name:String
-    let id =  UUID()
+    var id =  UUID()
     
     init(_ name: String) {
         self.name = name
     }
 }
 
-struct CityState: Identifiable, Equatable{
+struct CityState: Identifiable, Equatable, Codable{
     let name: String
     let country: Country
-    let id =  UUID()
+    var id =  UUID()
     
     init(_ name: String, country: Country) {
         self.name = name
@@ -27,10 +27,10 @@ struct CityState: Identifiable, Equatable{
     }
 }
 
-struct City: Identifiable, Equatable{
+struct City: Identifiable, Equatable, Codable{
     let name: String
     let state: CityState
-    let id =  UUID()
+    var id =  UUID()
     
     init(_ name: String, state: CityState) {
         self.name = name

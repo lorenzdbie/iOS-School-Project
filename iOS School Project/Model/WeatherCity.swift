@@ -6,11 +6,13 @@
 //
 
 import Foundation
-struct WeatherCity: Identifiable{
-    let id = UUID()
+struct WeatherCity: Identifiable, Codable{
+    var id = UUID()
     let city: City
     let location: Location
     let weather: Weather
     let pollution: Pollution
+    
+  
 }
 

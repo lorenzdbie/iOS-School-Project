@@ -27,7 +27,7 @@ struct LocationRequestView: View {
                     .multilineTextAlignment(.center)
                     .padding()
                 
-                Text("Statt sharing your location with us")
+                Text("Start sharing your location with us")
                     .multilineTextAlignment(.center)
                     .frame(width: 140)
                     .padding()

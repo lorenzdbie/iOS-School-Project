@@ -110,7 +110,7 @@ struct WeatherAppView: View {
 
 struct CityCard: View {
     let city: WeatherCity
-    @State private var yOffset: CGFloat = 100 // Initial offset
+//    @State private var yOffset: CGFloat = 100 // Initial offset
     
     var body: some View {
         ZStack {

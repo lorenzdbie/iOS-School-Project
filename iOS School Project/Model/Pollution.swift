@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Pollution{
+struct Pollution: Codable{
     let timeStamp: String
     let aqiUsa: Float
     let mainUsa: String

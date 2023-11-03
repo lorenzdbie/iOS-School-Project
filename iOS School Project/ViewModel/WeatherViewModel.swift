@@ -11,9 +11,14 @@ import CoreLocation
 class WeatherViewModel: ObservableObject{
     
     private let cityProvider = LocalWeatherCityDataProvider()
-    let locationProvider = LocalLocationDataProvider()
+    private let locationProvider = LocalLocationDataProvider()
     
-    @Published var cityList: [WeatherCity]
+    @Published var cityList: [WeatherCity]  = [] {
+        didSet{
+            autosave()
+        }
+        
+    }
     @Published var currentCity: WeatherCity
     @Published var localCity: WeatherCity?
     private var long:Double = 0
@@ -23,14 +28,36 @@ class WeatherViewModel: ObservableObject{
     let baseUrl = "https://api.airvisual.com/v2/"
     let secretKey = "key=efc93cd2-4e04-445e-beec-c8e9d2b5aca1"
     
+    private let autosaveURL: URL = URL.documentsDirectory.appendingPathComponent("Autosaved.cityList")
     
     init() {
-        cityList = cityProvider.getWeatherCityData()
-        currentCity = cityProvider.defaultWeather
+        if let data = try? Data(contentsOf: autosaveURL),
+           let autosavedWeatherCityList = try? [WeatherCity](json: data){
+            cityList = autosavedWeatherCityList
+            currentCity = autosavedWeatherCityList[0]
+        } else{
+            cityList = cityProvider.getWeatherCityData()
+            currentCity = cityProvider.defaultWeather
+        }
         long = LocationManager.shared.userLocation?.coordinate.longitude ?? 0
         lat = LocationManager.shared.userLocation?.coordinate.latitude ?? 0
         loadData()
     }
+    
+    private func autosave(){
+        save(to: autosaveURL)
+        print("Autosaved to: \(autosaveURL)")
+    }
+    
+    private func save(to url: URL){
+        do {
+            let data = try cityList.json()
+            try data.write(to: url)
+        } catch let error {
+            print("Weathercity document: error while saving \(error.localizedDescription)")
+        }
+    }
+    
     
     func addCity(country:String, state: String, city: String){
         print(country)
@@ -50,6 +77,21 @@ class WeatherViewModel: ObservableObject{
         // loadData()
     }
 }
+
+
+
+extension [WeatherCity]{
+    func json() throws -> Data {
+        let encoded = try JSONEncoder().encode(self)
+        print("WeatherCity list = \(String(data: encoded, encoding: .utf8) ?? "nil")")
+        return encoded
+    }
+    
+    init(json: Data) throws {
+        self = try JSONDecoder().decode([WeatherCity].self, from: json)
+    }
+}
+
 
 
 //MARK: - Async/Await

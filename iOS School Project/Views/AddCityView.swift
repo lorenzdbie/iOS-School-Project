@@ -17,6 +17,7 @@ struct AddCityView: View {
     @State private var selectedCountry: String = ""
     @State private var selectedState: String = ""
     @State private var selectedCity: String = ""
+    @State private var showAlert = false
     
     var body: some View {
         VStack{
@@ -45,7 +46,14 @@ struct AddCityView: View {
                 //                selectedCity = ""
                 //                addModel.cities.removeAll()
                 addModel.getCitiesForState(state: selectedState)
-            }
+            }.onReceive(addModel.$error, perform: { error in
+                if error != nil {
+                    showAlert.toggle()
+                }
+            }).alert(isPresented: $showAlert, content: {
+                Alert(title:Text("Error"),
+                      message: Text(addModel.error?.localizedDescription ?? ""))
+            })
     }
     
     private var selector: some View {

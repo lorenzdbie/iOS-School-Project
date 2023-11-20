@@ -129,7 +129,7 @@ struct CityCard: View {
         //       }
     }
     
-    private func tempCard(_ weather: Weather)-> some View{
+    private func tempCard(_ weather: Weather) -> some View{
         VStack{
             temperture(weather.temperature, size: ViewSize.small).fontWeight(.light).font(.caption)
             Spacer().frame(height: getSystemFontSize())
@@ -139,5 +139,5 @@ struct CityCard: View {
 }
 
 #Preview {
-    WeatherAppView(model: WeatherViewModel())
+    WeatherAppView(model: WeatherViewModel(apiService: WeatherApiService()))
 }

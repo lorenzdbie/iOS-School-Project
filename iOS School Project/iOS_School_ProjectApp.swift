@@ -14,7 +14,7 @@ struct iOS_School_ProjectApp: App {
     var body: some Scene {
         WindowGroup {
             Group{
-                let model = WeatherViewModel()
+                let model = WeatherViewModel(apiService: WeatherApiService())
                 
                 if locationManager.userLocation == nil {
                     LocationRequestView()

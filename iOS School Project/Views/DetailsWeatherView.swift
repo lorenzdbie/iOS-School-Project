@@ -41,5 +41,5 @@ struct DetailsWeatherView: View {
 
 
 #Preview {
-    DetailsWeatherView(city: WeatherViewModel().cityList[1])
+    DetailsWeatherView(city: WeatherViewModel(apiService: WeatherApiService()).cityList[1])
 }

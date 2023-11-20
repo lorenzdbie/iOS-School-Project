@@ -10,7 +10,7 @@ import SwiftUI
 
 struct AddCityView: View {
     @ObservedObject var model: WeatherViewModel
-    @ObservedObject var addModel = AddCityViewModel()
+    @ObservedObject var addCityViewModel = AddCityViewModel(apiService: WeatherApiService())
     @Binding var isShown: Bool
     var onAddCity: ()-> Void
     
@@ -40,19 +40,19 @@ struct AddCityView: View {
                 //                selectedState = ""
                 //                selectedCity = ""
                 //                addModel.states.removeAll()
-                addModel.getStatesForCountry(country: selectedCountry)
+                addCityViewModel.getStatesForCountry(country: selectedCountry)
             }
             .onChange(of: selectedState) {
                 //                selectedCity = ""
                 //                addModel.cities.removeAll()
-                addModel.getCitiesForState(state: selectedState)
-            }.onReceive(addModel.$error, perform: { error in
+                addCityViewModel.getCitiesForState(state: selectedState)
+            }.onReceive(addCityViewModel.$error, perform: { error in
                 if error != nil {
                     showAlert.toggle()
                 }
             }).alert(isPresented: $showAlert, content: {
                 Alert(title:Text("Error"),
-                      message: Text(addModel.error?.localizedDescription ?? ""))
+                      message: Text(addCityViewModel.error?.localizedDescription ?? ""))
             })
     }
     
@@ -61,7 +61,7 @@ struct AddCityView: View {
             HStack {
                 Text("Country: ").padding(10)
                 Spacer()
-                if addModel.countries.isEmpty{
+                if addCityViewModel.countries.isEmpty{
                     Text("Loading ...").padding( 10)
                 }else{
                     Picker("Country", selection: $selectedCountry) {
@@ -69,7 +69,7 @@ struct AddCityView: View {
                         if selectedCountry.isEmpty{
                             Text("Select ... ").tag("")
                         }
-                        ForEach(addModel.countries, id: \.self) { country in
+                        ForEach(addCityViewModel.countries, id: \.self) { country in
                             Text(country.country).tag(country.country)
                         }
                     }
@@ -80,7 +80,7 @@ struct AddCityView: View {
                 HStack {
                     Text("State: ").padding(10)
                     Spacer()
-                    if addModel.states.isEmpty{
+                    if addCityViewModel.states.isEmpty{
                         Text("Loading ...").padding( 10)
                     } else{
                         Picker("State", selection: $selectedState) {
@@ -88,7 +88,7 @@ struct AddCityView: View {
                             if selectedState.isEmpty{
                                 Text("Select ... ").tag("")
                             }
-                            ForEach(addModel.states, id: \.self) { state in
+                            ForEach(addCityViewModel.states, id: \.self) { state in
                                 Text(state.state).tag(state.state)
                             }
                         }
@@ -99,7 +99,7 @@ struct AddCityView: View {
                 HStack {
                     Text("City: ").padding(10)
                     Spacer()
-                    if addModel.cities.isEmpty {
+                    if addCityViewModel.cities.isEmpty {
                         Text("Loading ...").padding(10)
                     } else {
                         Picker("City", selection: $selectedCity) {
@@ -107,7 +107,7 @@ struct AddCityView: View {
                             if selectedCity.isEmpty{
                                 Text("Select ... ").tag("")
                             }
-                            ForEach(addModel.cities, id: \.self) { city in
+                            ForEach(addCityViewModel.cities, id: \.self) { city in
                                 Text(city.city).tag(city.city)
                             }
                         }

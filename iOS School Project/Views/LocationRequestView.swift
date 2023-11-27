@@ -22,12 +22,12 @@ struct LocationRequestView: View {
                     
                     .padding(.bottom, 32)
                 
-                Text("Would you like to view the weather at your location?")
+                Text(NSLocalizedString("startSharingTitle", comment: ""))
                     .font(.system(size: 28, weight: .semibold))
                     .multilineTextAlignment(.center)
                     .padding()
                 
-                Text("Start sharing your location with us")
+                Text(NSLocalizedString("startSharing", comment: ""))
                     .multilineTextAlignment(.center)
                     .frame(width: 140)
                     .padding()
@@ -39,7 +39,7 @@ struct LocationRequestView: View {
                         print("request location from user")
                         LocationManager.shared.requestLocation()
                     } label: {
-                        Text("Allow location")
+                        Text(NSLocalizedString("allow", comment: ""))
                             .padding()
                             .font(.headline)
                             .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
@@ -51,8 +51,9 @@ struct LocationRequestView: View {
                     
                     Button{
                         print("Dismiss")
+                        LocationManager.shared.dismissLocation()
                     } label: {
-                        Text("Maybe later")
+                        Text(NSLocalizedString("dismiss", comment: ""))
                             .padding()
                             .font(.headline)
                             .foregroundColor(.white)

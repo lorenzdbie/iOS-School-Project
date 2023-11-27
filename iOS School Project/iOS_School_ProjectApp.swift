@@ -16,7 +16,7 @@ struct iOS_School_ProjectApp: App {
             Group{
                 let model = WeatherViewModel(apiService: WeatherApiService())
                 
-                if locationManager.userLocation == nil {
+                if locationManager.userLocation == nil  && locationManager.shareLoaction == nil{
                     LocationRequestView()
                 }else {
                     WeatherAppView(model: model).background(Color.black)

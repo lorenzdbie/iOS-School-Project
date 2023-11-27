@@ -24,7 +24,7 @@ struct WeatherAppView: View {
                 showAlert.toggle()
             }
         }).alert(isPresented: $showAlert, content: {
-            Alert(title:Text("Error"),
+            Alert(title:Text(NSLocalizedString("error", comment: "")),
                   message: Text(model.error?.localizedDescription ?? ""))
         })
         //.navigationViewStyle(StackNavigationViewStyle())
@@ -48,7 +48,7 @@ struct WeatherAppView: View {
             Image("\(icon)")
                 .resizable()
                 .scaledToFit()
-            Text("Weather")
+            Text(NSLocalizedString("weather", comment: ""))
                 .font(.system(size: 50))
         }.frame(height: 50)
     }

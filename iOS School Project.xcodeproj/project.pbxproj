@@ -25,6 +25,7 @@
 		6E68C8AC2AEE9448008EF6FD /* LocalLocationDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E68C8AB2AEE9448008EF6FD /* LocalLocationDataProvider.swift */; };
 		6ECFEF252B0BCD230055F096 /* ApiService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ECFEF242B0BCD230055F096 /* ApiService.swift */; };
 		6ECFEF272B0BD0870055F096 /* WeatherApiService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ECFEF262B0BD0870055F096 /* WeatherApiService.swift */; };
+		6ECFEF292B14CBA00055F096 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 6ECFEF282B14CBA00055F096 /* Localizable.xcstrings */; };
 		6EF7EFE22AEFC820006205BC /* Extentions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF7EFE12AEFC820006205BC /* Extentions.swift */; };
 		6EF7EFE42AF2E753006205BC /* LocationRequestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF7EFE32AF2E753006205BC /* LocationRequestView.swift */; };
 		6EF7EFE62AF2E790006205BC /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF7EFE52AF2E790006205BC /* LocationManager.swift */; };
@@ -52,6 +53,7 @@
 		6E68C8AB2AEE9448008EF6FD /* LocalLocationDataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalLocationDataProvider.swift; sourceTree = "<group>"; };
 		6ECFEF242B0BCD230055F096 /* ApiService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiService.swift; sourceTree = "<group>"; };
 		6ECFEF262B0BD0870055F096 /* WeatherApiService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherApiService.swift; sourceTree = "<group>"; };
+		6ECFEF282B14CBA00055F096 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		6EF7EFE12AEFC820006205BC /* Extentions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extentions.swift; sourceTree = "<group>"; };
 		6EF7EFE32AF2E753006205BC /* LocationRequestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationRequestView.swift; sourceTree = "<group>"; };
 		6EF7EFE52AF2E790006205BC /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
@@ -149,6 +151,7 @@
 			children = (
 				6E68C8A72AEE88F6008EF6FD /* Utilities.swift */,
 				6EF7EFE12AEFC820006205BC /* Extentions.swift */,
+				6ECFEF282B14CBA00055F096 /* Localizable.xcstrings */,
 			);
 			path = utils;
 			sourceTree = "<group>";
@@ -232,6 +235,7 @@
 			files = (
 				6E42BB932AEBB08000F70D73 /* Preview Assets.xcassets in Resources */,
 				6E42BB902AEBB08000F70D73 /* Assets.xcassets in Resources */,
+				6ECFEF292B14CBA00055F096 /* Localizable.xcstrings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

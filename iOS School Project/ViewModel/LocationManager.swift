@@ -11,6 +11,7 @@ class LocationManager: NSObject, ObservableObject{
     
     private let manager = CLLocationManager()
     @Published var userLocation: CLLocation?
+    @Published var shareLoaction: Bool?
     static let shared = LocationManager()
     
     override init(){
@@ -20,6 +21,10 @@ class LocationManager: NSObject, ObservableObject{
         manager.distanceFilter = 100
         manager.startUpdatingLocation()
     }
+    func dismissLocation(){
+        shareLoaction = false
+    }
+    
     func requestLocation(){
         manager.requestWhenInUseAuthorization()
     }

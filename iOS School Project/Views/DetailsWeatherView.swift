@@ -14,30 +14,114 @@ struct DetailsWeatherView: View {
     var body: some View {
         VStack{
             detailHeader
-            HStack{
-                VStack(alignment: .leading){
-                    temperture(city.weather.temperature, size: ViewSize.large)
-                    windDirection(city.weather.windDirection, size: ViewSize.large)
-                    windDirectionRose(city.weather.windDirection)
-                }
-                Spacer()
-                weatherIcon(city.weather.weatherIcon)
+            Divider()
+            ScrollView{
+                weatherDetails
+                Divider()
+                pollutionDetails
             }
-            Spacer()
+           Spacer()
+            Text("\(NSLocalizedString("lastUpdated", comment: "")): \(convertDateString(city.weather.timeStamp))")
         }.padding(10)
     }
-
+    
     private var detailHeader: some View{
         HStack(alignment: .firstTextBaseline){
-            Text("Country: " + city.city.state.country.name)
+            Text("\(NSLocalizedString("country", comment: "")): \n" + city.city.state.country.name)
             Spacer()
-            Text("State: " + city.city.state.name)
+            Text("\(NSLocalizedString("state", comment: "")): \n" + city.city.state.name)
             Spacer()
-            Text("City: " + city.city.name)
-        }.padding(.bottom, 10)
+            Text("\(NSLocalizedString("city", comment: "")): \n" + city.city.name)
+        }.padding(.bottom, 10).modifier(CommonStyleModifier())
+    }
+    
+    private var weatherDetails: some View {
+        VStack{
+            Text(NSLocalizedString("weather", comment: "")).font(.title)
+            HStack(alignment: .top){
+                VStack(){
+                    temperature.modifier(CommonStyleModifier())
+                    wind.modifier(CommonStyleModifier())
+                }
+                Spacer().frame(width: 15)
+                VStack{
+                    weatherIcon(city.weather.weatherIcon).frame(width: 100).modifier(CommonStyleModifier())
+                    Spacer().frame(height: 35)
+                    humidity.modifier(CommonStyleModifier())
+                    Spacer().frame(height: 16.5)
+                    pressure.modifier(CommonStyleModifier())
+                }
+            }
+        }
+    }
+    
+    private var pollutionDetails: some View {
+        VStack{
+            Text(NSLocalizedString("airQuality", comment: "")).font(.title)
+            HStack(alignment: .top){
+                VStack{
+                    Text(NSLocalizedString("usStd", comment: ""))
+                    Text("\(city.pollution.aqiUsa, specifier: "%.0f") \(pollutionUnit(city.pollution.mainUsa))")
+                }.modifier(CommonStyleModifier())
+                Spacer().frame(width: 15)
+                VStack{
+                    Text(NSLocalizedString("chStd", comment: ""))
+                    Text("\(city.pollution.aqiChina, specifier: "%.0f") \(pollutionUnit(city.pollution.mainChina))")
+                }.modifier(CommonStyleModifier())
+            }
+        }
+    }
+    
+
+    
+    
+    
+    
+    private var temperature: some View {
+        VStack{
+            Text(NSLocalizedString("temperature", comment: "")).font(.title3)
+            temperture(city.weather.temperature, size: ViewSize.small)
+        }
+    }
+    
+    private var pressure: some View {
+        VStack(){
+            Text(NSLocalizedString("pressure", comment: "")).font(.title3)
+            Text("\(city.weather.atmosphericPressure, specifier: "%.0f") hPa")
+        }
+    }
+    
+    private var wind: some View {
+        VStack{
+            Text(NSLocalizedString("wind", comment: "")).font(.title3)
+            VStack(alignment: .leading){
+                Text("\(NSLocalizedString("speed", comment: "")): \(city.weather.windSpeed, specifier: "%.2f") m/s")
+                windDirection(city.weather.windDirection, size: ViewSize.large)
+            }
+                windDirectionRose(city.weather.windDirection)
+        }
+    }
+    private var humidity: some View {
+        VStack {
+            Text(NSLocalizedString("humidity", comment: "")).font(.title3)
+            Text("\(city.weather.humidity, specifier: "%.0f") %")
+        }
     }
 }
 
+struct CommonStyleModifier: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .padding(10)
+            .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/)
+            .background(Color.gray.opacity(0.2))
+            .cornerRadius(10)
+            .overlay(
+                RoundedRectangle(cornerRadius: 10)
+                    .stroke(Color.black, lineWidth: 1)
+            )
+    }
+}
 
 
 #Preview {

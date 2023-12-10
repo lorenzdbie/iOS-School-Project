@@ -9,38 +9,67 @@ import SwiftUI
 
 struct WeatherAppView: View {
     @ObservedObject var model: WeatherViewModel
-    //@ObservedObject var loctionManager = LocationManager.shared
     @State public var isPopoverPresented = false
     @State private var showAlert = false
     @Environment(\.colorScheme) var colorScheme
     var textColor:Color { colorScheme == .dark ? .white : .black}
-    var modeColor: Color { colorScheme == .dark ? .gray : .lightGray}
+    @State private var selection: WeatherCity?
+    @State private var columnVisibility =
+      NavigationSplitViewVisibility.doubleColumn
     
     var body: some View {
-        NavigationView {
-            mainView
-        }.onReceive(model.$error, perform: { error in
-            if error != nil {
-                showAlert.toggle()
+        VStack{
+            title
+            ViewThatFits{
+                iPadView
+                iPhoneView
             }
-        }).alert(isPresented: $showAlert, content: {
-            Alert(title:Text(NSLocalizedString("error", comment: "")),
-                  message: Text(model.error?.localizedDescription ?? ""))
-        })
-        //.navigationViewStyle(StackNavigationViewStyle())
-        //.navigationBarHidden(true)
-        //.background(NavigationLink("", destination: EmptyView()).opacity(0))
+            .onReceive(model.$error, perform: { error in
+                if error != nil {
+                    showAlert.toggle()
+                }
+            }).alert(isPresented: $showAlert, content: {
+                Alert(title:Text(NSLocalizedString("error", comment: "")),
+                      message: Text(model.error?.localizedDescription ?? ""))
+            })
+        }.background(colorScheme == .dark ? .black : .teal)
     }
     
-    private var mainView: some View{
-        ZStack(alignment: .bottomTrailing){
-            VStack {
-                title
-                cityList
+    var iPhoneView: some View {
+        NavigationStack {
+            ZStack(alignment: .bottomTrailing){
+                VStack {
+                    iPhoneCityList
+                }
+                addButton
             }
-            addButton
         }
     }
+    
+    var iPadView: some View{
+        NavigationSplitView(columnVisibility: $columnVisibility){
+            ZStack(alignment: .bottomTrailing){
+                VStack {
+                    iPadCityList
+                }
+                addButton
+            }.toolbar(removing: .sidebarToggle)
+        }
+    detail: {
+        if let city = selection {
+            DetailsWeatherView(city: city)
+        } else {
+            VStack{
+                Text("Select a city")
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .gradientBackground(colorScheme: colorScheme)
+    }
+    }
+     .navigationSplitViewStyle(.balanced)
+}
+    
+    
     
     private var title: some View{
         HStack{
@@ -53,21 +82,19 @@ struct WeatherAppView: View {
         }.frame(height: 50)
     }
     
-    private var cityList: some View {
-        List{
+    
+    
+    private var iPadCityList: some View {
+        List(selection: $selection ){
             if let localCity = model.localCity{
-                NavigationLink(destination: DetailsWeatherView(city: localCity)){
+                NavigationLink(value: localCity){
                     Image(systemName: "location")
                         .font(.title2)
                     CityCard(city: localCity)
-                }.deleteDisabled(true)
-                    .moveDisabled(true)
-                    .refreshable {
-                        model.handleRefresh()
-                    }
+                }
             }
             ForEach(model.cityList) { city in
-                NavigationLink(destination: DetailsWeatherView(city: city)) {
+                NavigationLink(value: city) {
                     CityCard(city: city)
                 }
             }.onDelete{ indexSet in
@@ -78,7 +105,41 @@ struct WeatherAppView: View {
             .onMove { indexSet, newOffset in
                 model.cityList.move(fromOffsets: indexSet, toOffset: newOffset)
             }
-        }
+        }.scrollContentBackground(.hidden)
+            .gradientBackground(colorScheme: colorScheme)
+
+    }
+    
+    
+    
+    private var iPhoneCityList: some View {
+            List{
+                if let localCity = model.localCity{
+                    NavigationLink(destination: DetailsWeatherView(city: localCity)){
+                        Image(systemName: "location")
+                            .font(.title2)
+                        CityCard(city: localCity)
+                    }.deleteDisabled(true)
+                        .moveDisabled(true)
+                        .refreshable {
+                            model.handleRefresh()
+                        }
+                }
+                ForEach(model.cityList) { city in
+                    NavigationLink(destination: DetailsWeatherView(city: city)) {
+                        CityCard(city: city)
+                    }
+                }.onDelete{ indexSet in
+                    withAnimation{
+                        model.cityList.remove(atOffsets: indexSet)
+                    }
+                }
+                .onMove { indexSet, newOffset in
+                    model.cityList.move(fromOffsets: indexSet, toOffset: newOffset)
+                }
+            }.scrollContentBackground(.hidden)
+            .gradientBackground(colorScheme: colorScheme)
+
     }
     
     private var addButton: some View{
@@ -91,8 +152,8 @@ struct WeatherAppView: View {
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 50, height: 50)
-                    .background(Color.blue)
-                    .foregroundColor(.white)
+                    .background(Color.teal)
+                    .foregroundStyle(colorScheme == .dark ? .black:.white)
                     .clipShape(Circle())
                     .shadow(radius: 10)
             }.padding(.bottom, 10)

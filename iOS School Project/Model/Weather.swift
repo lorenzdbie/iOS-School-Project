@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Weather: Codable{
+struct Weather: Codable, Hashable{
     let timeStamp: String
     let temperature: Float
     let atmosphericPressure: Float

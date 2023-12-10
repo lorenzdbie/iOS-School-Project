@@ -6,7 +6,8 @@
 //
 
 import Foundation
-struct WeatherCity: Identifiable, Codable{
+struct WeatherCity: Identifiable, Codable, Hashable, Equatable{
+    
     var id = UUID()
     let city: City
     let location: Location

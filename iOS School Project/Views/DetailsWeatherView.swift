@@ -11,6 +11,8 @@ struct DetailsWeatherView: View {
     
     let city: WeatherCity
     
+    @Environment(\.colorScheme) var colorScheme
+    
     var body: some View {
         VStack{
             detailHeader
@@ -23,6 +25,9 @@ struct DetailsWeatherView: View {
            Spacer()
             Text("\(NSLocalizedString("lastUpdated", comment: "")): \(convertDateString(city.weather.timeStamp))")
         }.padding(10)
+            .gradientBackground(colorScheme: colorScheme)
+
+
     }
     
     private var detailHeader: some View{

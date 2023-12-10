@@ -320,6 +320,9 @@
         }
       }
     },
+    "Select a city" : {
+
+    },
     "speed" : {
       "extractionState" : "manual",
       "localizations" : {

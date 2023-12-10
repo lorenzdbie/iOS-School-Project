@@ -9,8 +9,12 @@ import SwiftUI
 
 @main
 struct iOS_School_ProjectApp: App {
-    
     @ObservedObject var locationManager = LocationManager.shared
+    
+    init() {
+          UITableView.appearance().backgroundColor = .clear
+      }
+    
     var body: some Scene {
         WindowGroup {
             Group{

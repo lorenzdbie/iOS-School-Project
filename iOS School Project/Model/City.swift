@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Country: Identifiable, Equatable, Codable{
+struct Country: Identifiable, Equatable, Codable, Hashable{
 let name:String
     var id =  UUID()
     
@@ -16,7 +16,7 @@ let name:String
     }
 }
 
-struct CityState: Identifiable, Equatable, Codable{
+struct CityState: Identifiable, Equatable, Codable, Hashable{
     let name: String
     let country: Country
     var id =  UUID()
@@ -27,7 +27,7 @@ struct CityState: Identifiable, Equatable, Codable{
     }
 }
 
-struct City: Identifiable, Equatable, Codable{
+struct City: Identifiable, Equatable, Codable, Hashable{
     let name: String
     let state: CityState
     var id =  UUID()

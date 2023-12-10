@@ -46,6 +46,7 @@ class WeatherViewModel: ObservableObject{
             lat = LocationManager.shared.userLocation?.coordinate.latitude ?? 0
             loadLocationData()
         }
+        refreshCityData()
     }
     
     private func autosave(){
@@ -64,14 +65,24 @@ class WeatherViewModel: ObservableObject{
     
       
     func handleRefresh(){
-        long = LocationManager.shared.userLocation?.coordinate.longitude ?? 0
-        lat = LocationManager.shared.userLocation?.coordinate.latitude ?? 0
-        // loadData()
+        if LocationManager.shared.userLocation != nil{
+            long = LocationManager.shared.userLocation?.coordinate.longitude ?? 0
+            lat = LocationManager.shared.userLocation?.coordinate.latitude ?? 0
+            loadLocationData()
+        }
     }
     
     private func loadLocationData(){
-        Task(priority: .medium){
+        Task(priority: .high){
            try await fetchLocationData()
+        }
+    }
+    private func refreshCityData(){
+        for index in 0..<cityList.count{
+            let oldCityData = cityList[index]
+            Task(priority: .medium){
+                 try await fetchRefreshCityData(listIndex: index,country: oldCityData.city.state.country.name, state: oldCityData.city.self.state.name, city: oldCityData.city.self.name)
+                }
         }
     }
     
@@ -101,6 +112,17 @@ class WeatherViewModel: ObservableObject{
             self.error = error
         }
     }
+    
+    @MainActor
+    private func fetchRefreshCityData(listIndex: Int, country:String, state: String, city: String) async throws {
+        do {
+            let city = try await apiService.fetchCityDataAsync(country: country, state: state, city: city)
+            self.cityList[listIndex] = city
+        } catch {
+            self.error = error
+        }
+    }
+    
     
     //    func addCity(country:String, state: String, city: String){
     //        print(country)

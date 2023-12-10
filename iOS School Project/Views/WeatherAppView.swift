@@ -40,6 +40,9 @@ struct WeatherAppView: View {
             ZStack(alignment: .bottomTrailing){
                 VStack {
                     iPhoneCityList
+                        .refreshable {
+                        model.handleRefresh()
+                    }
                 }
                 addButton
             }
@@ -51,9 +54,14 @@ struct WeatherAppView: View {
             ZStack(alignment: .bottomTrailing){
                 VStack {
                     iPadCityList
+                        .refreshable {
+                        model.handleRefresh()
+                    }
                 }
                 addButton
-            }.toolbar(removing: .sidebarToggle)
+            }
+            .toolbar(removing: .sidebarToggle)
+            .navigationSplitViewColumnWidth(1000)
         }
     detail: {
         if let city = selection {
@@ -105,7 +113,9 @@ struct WeatherAppView: View {
             .onMove { indexSet, newOffset in
                 model.cityList.move(fromOffsets: indexSet, toOffset: newOffset)
             }
-        }.scrollContentBackground(.hidden)
+        
+        }
+        .scrollContentBackground(.hidden)
             .gradientBackground(colorScheme: colorScheme)
 
     }

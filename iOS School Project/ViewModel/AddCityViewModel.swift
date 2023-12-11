@@ -19,12 +19,6 @@ class AddCityViewModel: ObservableObject{
     private var state = ""
 //    private var city = ""
     
-//    let baseUrl = "https://api.airvisual.com/v2/"
-//    let secretKey = "key=efc93cd2-4e04-445e-beec-c8e9d2b5aca1"
-    
-//    var countriesUrlString: String{
-//        "\(baseUrl)countries?\(secretKey)"
-//    }
     init (apiService: ApiService) {
         self.apiService = apiService
         getCountries()
@@ -42,12 +36,6 @@ class AddCityViewModel: ObservableObject{
             try await fetchStatesData()
         }
         
-       // self.country = country
-       // var statesUrlString: String{
-       //     "\(baseUrl)states?country=\(country)&\(secretKey)"
-       // }
-        // loadStatesData(url: statesUrlString)
-        
     }
     
     func getCitiesForState(state: String){
@@ -55,11 +43,6 @@ class AddCityViewModel: ObservableObject{
         Task(priority: .medium){
             try await fetchCitiesData()
         }
-//        var citiesUrlString: String{
-//            "\(baseUrl)cities?state=\(state)&country=\(country)&\(secretKey)"
-//        }
-//        print(citiesUrlString)
-//        loadCitiesData(url: citiesUrlString)
     }
     
 //MARK: - Async/Await

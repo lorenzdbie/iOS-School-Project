@@ -26,9 +26,6 @@ class WeatherViewModel: ObservableObject{
     private var lat: Double = 0
   
     
-//    let baseUrl = "https://api.airvisual.com/v2/"
-//    let secretKey = "key=efc93cd2-4e04-445e-beec-c8e9d2b5aca1"
-    
     private let autosaveURL: URL = URL.documentsDirectory.appendingPathComponent("Autosaved.cityList")
     
     init(apiService: ApiService) {
@@ -122,17 +119,6 @@ class WeatherViewModel: ObservableObject{
             self.error = error
         }
     }
-    
-    
-    //    func addCity(country:String, state: String, city: String){
-    //        print(country)
-    //        print(state)
-    //        print(city)
-    //        var urlString: String{
-    //            "\(baseUrl)city?city=\(city)&state=\(state)&country=\(country)&\(secretKey)"
-    //        }
-    //        print(urlString)
-    //    }
 }
 
 

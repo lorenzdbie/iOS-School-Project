@@ -95,7 +95,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Allow location"
+            "value" : "Share location"
           }
         }
       }
@@ -320,8 +320,16 @@
         }
       }
     },
-    "Select a city" : {
-
+    "selectCity" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Select a city"
+          }
+        }
+      }
     },
     "speed" : {
       "extractionState" : "manual",

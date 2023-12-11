@@ -22,6 +22,8 @@ extension [WeatherCity]{
 extension Color {
     static let lightGray = Color(.sRGB, red: 211/255, green: 211/255, blue: 211/255, opacity: 1)
     static let lighterGray = Color(.sRGB, red: 240/255, green: 240/255, blue: 240/255, opacity: 1)
+    static let darkTeal = Color(.sRGB, red: 0/255, green: 100/255, blue: 128/255, opacity: 1)
+    
 }
 
 extension View {

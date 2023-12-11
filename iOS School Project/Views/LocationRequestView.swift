@@ -8,9 +8,10 @@
 import SwiftUI
 
 struct LocationRequestView: View {
+    @Environment(\.colorScheme) var colorScheme
     var body: some View {
         ZStack{
-            Color(.blue).ignoresSafeArea()
+            Color(.clear).gradientBackground(colorScheme: colorScheme).ignoresSafeArea()
             
             VStack{
                 Spacer()
@@ -42,11 +43,12 @@ struct LocationRequestView: View {
                         Text(NSLocalizedString("allow", comment: ""))
                             .padding()
                             .font(.headline)
-                            .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
-                    }.frame(width: UIScreen.main.bounds.width)
+                            .foregroundColor(colorScheme == .dark ? .darkTeal: .white)
+                    }.frame(minWidth: 200, maxWidth: 500, alignment: .center)
                         .padding(.horizontal, -32)
-                        .background(.white)
+                        .background(colorScheme == .dark ? .white : .darkTeal)
                         .clipShape(Capsule())
+                        .shadow(radius: 10)
                         .padding()
                     
                     Button{
@@ -56,11 +58,10 @@ struct LocationRequestView: View {
                         Text(NSLocalizedString("dismiss", comment: ""))
                             .padding()
                             .font(.headline)
-                            .foregroundColor(.white)
+                            .foregroundColor(colorScheme == .dark ? .white : .black)
                     }
                 }.padding(.bottom, 32)
             }
-            .foregroundColor(.white)
         }
     }
 }

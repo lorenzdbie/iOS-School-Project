@@ -68,7 +68,7 @@ struct WeatherAppView: View {
             DetailsWeatherView(city: city)
         } else {
             VStack{
-                Text("Select a city")
+                Text(NSLocalizedString("selectCity", comment: ""))
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .gradientBackground(colorScheme: colorScheme)

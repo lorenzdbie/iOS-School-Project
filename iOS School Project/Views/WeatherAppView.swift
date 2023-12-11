@@ -114,7 +114,7 @@ struct WeatherAppView: View {
                 model.cityList.move(fromOffsets: indexSet, toOffset: newOffset)
             }
         
-        }
+        }.accentColor(.darkTeal)
         .scrollContentBackground(.hidden)
             .gradientBackground(colorScheme: colorScheme)
 

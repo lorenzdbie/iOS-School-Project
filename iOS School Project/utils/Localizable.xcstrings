@@ -33,12 +33,12 @@
         }
       }
     },
-    "%@: %.2f m/s" : {
+    "%@: %.2f km/h" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "%1$@: %2$.2f m/s"
+            "value" : "%1$@: %2$.2f km/h"
           }
         }
       }

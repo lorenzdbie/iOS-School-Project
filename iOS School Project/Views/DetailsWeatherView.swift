@@ -100,7 +100,7 @@ struct DetailsWeatherView: View {
         VStack{
             Text(NSLocalizedString("wind", comment: "")).font(.title3)
             VStack(alignment: .leading){
-                Text("\(NSLocalizedString("speed", comment: "")): \(city.weather.windSpeed, specifier: "%.2f") m/s")
+                Text("\(NSLocalizedString("speed", comment: "")): \((city.weather.windSpeed * 3600) / 1000, specifier: "%.2f") km/h")
                 windDirection(city.weather.windDirection, size: ViewSize.large)
             }
                 windDirectionRose(city.weather.windDirection)
@@ -115,12 +115,14 @@ struct DetailsWeatherView: View {
 }
 
 struct CommonStyleModifier: ViewModifier {
+    @Environment(\.colorScheme) var colorScheme
     func body(content: Content) -> some View {
         content
             .padding(10)
             .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/)
-            .background(Color.gray.opacity(0.2))
+            .background(colorScheme == .dark ? Color.darkTeal : Color.lightTeal)
             .cornerRadius(10)
+            .shadow(radius: 10)
             .overlay(
                 RoundedRectangle(cornerRadius: 10)
                     .stroke(Color.black, lineWidth: 1)

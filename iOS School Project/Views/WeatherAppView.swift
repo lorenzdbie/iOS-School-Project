@@ -15,7 +15,7 @@ struct WeatherAppView: View {
     var textColor:Color { colorScheme == .dark ? .white : .black}
     @State private var selection: WeatherCity?
     @State private var columnVisibility =
-      NavigationSplitViewVisibility.doubleColumn
+    NavigationSplitViewVisibility.doubleColumn
     
     var body: some View {
         VStack{
@@ -41,8 +41,8 @@ struct WeatherAppView: View {
                 VStack {
                     iPhoneCityList
                         .refreshable {
-                        model.handleRefresh()
-                    }
+                            model.handleRefresh()
+                        }
                 }
                 addButton
             }
@@ -55,14 +55,14 @@ struct WeatherAppView: View {
                 VStack {
                     iPadCityList
                         .refreshable {
-                        model.handleRefresh()
-                    }
+                            model.handleRefresh()
+                        }
                 }
                 addButton
             }
             .toolbar(removing: .sidebarToggle)
-            .navigationSplitViewColumnWidth(1000)
         }
+        
     detail: {
         if let city = selection {
             DetailsWeatherView(city: city)
@@ -72,10 +72,10 @@ struct WeatherAppView: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .gradientBackground(colorScheme: colorScheme)
+        }
     }
+    .navigationSplitViewStyle(.balanced)
     }
-     .navigationSplitViewStyle(.balanced)
-}
     
     
     
@@ -113,43 +113,46 @@ struct WeatherAppView: View {
             .onMove { indexSet, newOffset in
                 model.cityList.move(fromOffsets: indexSet, toOffset: newOffset)
             }
-        
-        }.accentColor(.darkTeal)
+        }
+        .accentColor(.darkTeal)
         .scrollContentBackground(.hidden)
-            .gradientBackground(colorScheme: colorScheme)
-
+        .gradientBackground(colorScheme: colorScheme)
     }
     
     
     
     private var iPhoneCityList: some View {
-            List{
-                if let localCity = model.localCity{
-                    NavigationLink(destination: DetailsWeatherView(city: localCity)){
-                        Image(systemName: "location")
-                            .font(.title2)
-                        CityCard(city: localCity)
-                    }.deleteDisabled(true)
-                        .moveDisabled(true)
-                        .refreshable {
-                            model.handleRefresh()
-                        }
+        List{
+            if let localCity = model.localCity{
+                NavigationLink(destination: DetailsWeatherView(city: localCity)){
+                    Image(systemName: "location")
+                        .font(.title2)
+                    CityCard(city: localCity)
+                    
+                }.deleteDisabled(true)
+                    .moveDisabled(true)
+            }
+            ForEach(model.cityList) { city in
+                NavigationLink(destination: DetailsWeatherView(city: city)) {
+                    CityCard(city: city)
                 }
-                ForEach(model.cityList) { city in
-                    NavigationLink(destination: DetailsWeatherView(city: city)) {
-                        CityCard(city: city)
-                    }
-                }.onDelete{ indexSet in
-                    withAnimation{
-                        model.cityList.remove(atOffsets: indexSet)
-                    }
+            }.onDelete{ indexSet in
+                withAnimation{
+                    model.cityList.remove(atOffsets: indexSet)
                 }
-                .onMove { indexSet, newOffset in
-                    model.cityList.move(fromOffsets: indexSet, toOffset: newOffset)
-                }
-            }.scrollContentBackground(.hidden)
-            .gradientBackground(colorScheme: colorScheme)
-
+            }
+            .onMove { indexSet, newOffset in
+                model.cityList.move(fromOffsets: indexSet, toOffset: newOffset)
+            }
+        }
+        .scrollContentBackground(.hidden)
+        .gradientBackground(colorScheme: colorScheme)
+    }
+    
+    private func generateHapticFeedback() {
+        let generator = UIImpactFeedbackGenerator(style: .medium)
+        generator.prepare()
+        generator.impactOccurred()
     }
     
     private var addButton: some View{
@@ -181,7 +184,6 @@ struct WeatherAppView: View {
 
 struct CityCard: View {
     let city: WeatherCity
-//    @State private var yOffset: CGFloat = 100 // Initial offset
     
     var body: some View {
         ZStack {
@@ -192,12 +194,6 @@ struct CityCard: View {
                 weatherIcon(city.weather.weatherIcon).frame(height: 70)
             }
         }
-        //       .offset(y: yOffset)
-        //        .onAppear {
-        //            withAnimation(.easeInOut(duration: 0.5)) {
-        //                yOffset = 0
-        //            }
-        //       }
     }
     
     private func tempCard(_ weather: Weather) -> some View{

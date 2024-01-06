@@ -14,29 +14,35 @@ struct DetailsWeatherView: View {
     @Environment(\.colorScheme) var colorScheme
     
     var body: some View {
-        VStack{
-            detailHeader
-            Divider()
-            ScrollView{
-                weatherDetails
+            VStack{
+                detailHeader.frame(maxWidth: 800).padding(.horizontal, 16)
                 Divider()
-                pollutionDetails
-            }
-           Spacer()
-            Text("\(NSLocalizedString("lastUpdated", comment: "")): \(convertDateString(city.weather.timeStamp))")
-        }.padding(10)
+                ScrollView{
+                    weatherDetails.frame(maxWidth: 800).padding(.horizontal, 16)
+
+                    Divider()
+                    pollutionDetails.frame(maxWidth: 800).padding(.horizontal, 16)
+
+                    Spacer().frame(height: 30)
+                    timeStamp
+                }            }
+            
             .gradientBackground(colorScheme: colorScheme)
-
-
+    }
+    
+    private var timeStamp: some View{
+        Text("\(NSLocalizedString("lastUpdated", comment: "")): \(convertDateString(city.weather.timeStamp))")
     }
     
     private var detailHeader: some View{
         HStack(alignment: .firstTextBaseline){
+            Spacer()
             Text("\(NSLocalizedString("country", comment: "")): \n" + city.city.state.country.name)
             Spacer()
             Text("\(NSLocalizedString("state", comment: "")): \n" + city.city.state.name)
             Spacer()
             Text("\(NSLocalizedString("city", comment: "")): \n" + city.city.name)
+            Spacer()
         }.padding(.bottom, 10).modifier(CommonStyleModifier())
     }
     
@@ -127,6 +133,7 @@ struct CommonStyleModifier: ViewModifier {
                 RoundedRectangle(cornerRadius: 10)
                     .stroke(Color.black, lineWidth: 1)
             )
+
     }
 }
 

@@ -23,7 +23,7 @@ struct iOS_School_ProjectApp: App {
                 if locationManager.userLocation == nil  && locationManager.shareLoaction == nil{
                     LocationRequestView()
                 }else {
-                    WeatherAppView(model: model).background(Color.black)
+                    WeatherAppView(model: model)
                 }
             }
         }

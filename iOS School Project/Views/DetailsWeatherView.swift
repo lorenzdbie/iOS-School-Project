@@ -83,10 +83,6 @@ struct DetailsWeatherView: View {
         }
     }
     
-
-    
-    
-    
     
     private var temperature: some View {
         VStack{

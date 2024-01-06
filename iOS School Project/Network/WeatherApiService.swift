@@ -17,12 +17,13 @@ class WeatherApiService: ApiService {
         let urlString =  "\(baseUrl)countries?\(secretKey)"
         do{
             guard let url = URL(string: urlString) else { throw WeatherError.invalidURL }
+            
             let (data, response) = try await URLSession.shared.data(from: url)
+            
             guard (response as? HTTPURLResponse)?.statusCode == 200 else { throw WeatherError.serverError }
-            //            let json = try JSONSerialization.jsonObject(with: data, options: [])
-            //            print("API Response: \(json)")
+            
             guard let countries = try? JSONDecoder().decode(CountriesResponse.self, from: data) else { throw WeatherError.invalidData }
-            //            print("countries: \(countries)")
+            
             return countries.data
         }
     }
@@ -31,12 +32,13 @@ class WeatherApiService: ApiService {
         let urlString = "\(baseUrl)states?country=\(country)&\(secretKey)"
         do{
             guard let url = URL(string: urlString) else { throw WeatherError.invalidURL }
+            
             let (data, response) = try await URLSession.shared.data(from: url)
+            
             guard (response as? HTTPURLResponse)?.statusCode == 200 else { throw WeatherError.serverError }
-            //            let json = try JSONSerialization.jsonObject(with: data, options: [])
-            //            print("API Response: \(json)")
+            
             guard let states = try? JSONDecoder().decode(StateResponse.self, from: data) else { throw WeatherError.invalidData }
-            //            print("states: \(states)")
+            
             return states.data
         }
     }
@@ -45,14 +47,15 @@ class WeatherApiService: ApiService {
         let urlString = "\(baseUrl)cities?state=\(state)&country=\(country)&\(secretKey)"
         do{
             guard let url = URL(string: urlString) else { throw WeatherError.invalidURL }
+            
             let (data, response) = try await URLSession.shared.data(from: url)
+            
             guard (response as? HTTPURLResponse)?.statusCode == 200 else { throw WeatherError.serverError }
-            //            let json = try JSONSerialization.jsonObject(with: data, options: [])
-            //            print("API Response: \(json)")
+            
             guard let cities = try? JSONDecoder().decode(CityResponse.self, from: data) else { throw WeatherError.invalidData }
-            //            print("cities: \(cities)")
             return cities.data
-        } 
+            
+        }
     }
     
 
@@ -60,13 +63,13 @@ class WeatherApiService: ApiService {
         let urlString = "\(baseUrl)nearest_city?lat=\(lat)&lon=\(long)&\(secretKey)"
         do{
             guard let url = URL(string: urlString) else { throw WeatherError.invalidURL }
-            //            print(url)
+            
             let (data, response) = try await URLSession.shared.data(from: url)
+            
             guard (response as? HTTPURLResponse)?.statusCode == 200 else { throw WeatherError.serverError }
-            //            let json = try JSONSerialization.jsonObject(with: data, options: [])
-            //            print("API Response: \(json)")
+
             guard let weatherCity = try? parseWeatherCity(from: data) else { throw WeatherError.invalidData }
-            //            print(weatherCity)
+            
             return weatherCity
         }
     }
@@ -76,13 +79,13 @@ class WeatherApiService: ApiService {
         let urlString = "\(baseUrl)city?city=\(city)&state=\(state)&country=\(country)&\(secretKey)"
         do{
             guard let url = URL(string: urlString) else { throw WeatherError.invalidURL }
-            //            print(url)
+
             let (data, response) = try await URLSession.shared.data(from: url)
+            
             guard (response as? HTTPURLResponse)?.statusCode == 200 else { throw WeatherError.serverError }
-            //            let json = try JSONSerialization.jsonObject(with: data, options: [])
-            //            print("API Response: \(json)")
+
             guard let weatherCity = try? parseWeatherCity(from: data) else { throw WeatherError.invalidData }
-            //            print(weatherCity)
+
             return weatherCity
         }
     }
